@@ -70,6 +70,17 @@ class Database
         return $teachers;
     }
 
+    public function getAllSections()
+    {
+        $query = "SELECT * FROM t_section";
+        //appeler la méthode pour executer la requête
+        $req = $this->querySimpleExecute($query);
+        //appeler la méthode pour avoir le résultat sous forme de tableau
+        $sections = $this->formatData($req);
+        //retourne tous les enseignants
+        return $sections;
+    }
+
     //Recupère la liste des informations pour 1 enseignant
     public function getOneTeacher($id)
     {
@@ -102,38 +113,10 @@ class Database
             'gender' => $teacher['genre'],
             'nick_name' => $teacher['nickName'],
             'origin' => $teacher['origin'],
-            'fk_section' => $this->GetSectionIdBySectionName($teacher['section']),
+            'fk_section' => $teacher['section'],
         ];
 
         $response = $this->queryPrepareExecute($query, $replacements);
-    }
-
-    /**
-     * Fonction permettant de récupérer l'id de la section via le nom de la section
-     * @param $name string | Nom de la section
-     */
-    public function GetSectionIdBySectionName($name)
-    {
-
-        if ($name == 'info') {
-            $name = 'informatique';
-        }
-
-        $query = "
-            SELECT
-              idSection
-            FROM t_section
-            WHERE secName = :sec_name
-        ";
-
-        $replacements = ['sec_name' => $name];
-
-        $request = $this->queryPrepareExecute($query, $replacements);
-
-        // fetchObject permet de recuperer les valeurs d'une entree dans la db
-        $result = $request->fetchObject();
-
-        return $result->idSection;
     }
 
     /**
@@ -166,7 +149,7 @@ class Database
             'nick_name' => $teacher['nickName'],
             'origin' => $teacher['origin'],
             //Recupère l'id de la section grâce au nom de la section
-            'fk_section' => $this->GetSectionIdBySectionName($teacher['section']),
+            'fk_section' => $teacher['section'],
         ];
 
         $this->queryPrepareExecute($query, $replacements);
