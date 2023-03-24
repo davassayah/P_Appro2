@@ -12,6 +12,8 @@ session_start();
 include("Database.php");
 $db = new Database();
 
+$sections =[];
+
 //Si le formulaire a été envoyé alors un nouvel utilisateur est crée 
 if ($_POST) {
     $teachers = $db->InsertTeacher($_POST);
