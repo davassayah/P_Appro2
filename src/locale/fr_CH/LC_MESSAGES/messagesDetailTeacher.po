@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 12:15+0100\n"
+"PO-Revision-Date: 2023-03-24 13:12+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_CH\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: detailTeacher.php:25
+msgid "Version statique de l'application des surnoms"
+msgstr "Version statique de l'application des surnoms"
+
+#: detailTeacher.php:33
+msgid "Surnom des enseignants"
+msgstr "Surnom des enseignants"
+
+#: detailTeacher.php:40
+msgid "Mot de passe"
+msgstr "Mot de passe"
+
+#: detailTeacher.php:41
+msgid "Se connecter"
+msgstr "Se connecter"
+
+#: detailTeacher.php:48
+msgid "Zone pour le menu"
+msgstr "Zone pour le menu"
+
+#: detailTeacher.php:51
+msgid "Accueil"
+msgstr "Accueil"
+
+#: detailTeacher.php:54
+msgid "Ajouter un enseignant"
+msgstr "Ajouter un enseignant"
+
+#: detailTeacher.php:63
+msgid "Detail :"
+msgstr "Détail :"
+
+#: detailTeacher.php:93
+msgid "Surnom :"
+msgstr "Surnom :"
+
+#: detailTeacher.php:98
+msgid "Retour a la page d'accueil"
+msgstr "Retour à la page d'accueil"

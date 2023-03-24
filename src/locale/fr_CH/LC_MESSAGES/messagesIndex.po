@@ -1,0 +1,79 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 11:04+0100\n"
+"PO-Revision-Date: 2023-03-24 12:01+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_CH\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: index.php:61
+msgid "Version statique de l'application des surnoms"
+msgstr "Version statique de l'application des surnoms"
+
+#: index.php:69
+msgid "Surnom des enseignants"
+msgstr "Surnom des enseignants"
+
+#: index.php:74
+msgid "Choisissez une langue"
+msgstr "Choisissez une langue"
+
+#: index.php:76
+msgid "Francais"
+msgstr "Francais"
+
+#: index.php:77
+msgid "Anglais"
+msgstr "Anglais"
+
+#: index.php:80
+msgid "Submit"
+msgstr "Soumettre"
+
+#: index.php:88
+msgid "Mot de passe"
+msgstr "Mot de passe"
+
+#: index.php:89
+msgid "Se connecter"
+msgstr "Se connecter"
+
+#: index.php:97
+msgid "Zone pour le menu"
+msgstr "Zone pour le menu"
+
+#: index.php:100
+msgid "Accueil"
+msgstr "Accueil"
+
+#: index.php:103
+msgid "Ajouter un enseignant"
+msgstr "Ajouter un enseignant"
+
+#: index.php:110
+msgid "Liste des enseignants"
+msgstr "Liste des enseignants"
+
+#: index.php:115
+msgid "Nom"
+msgstr "Nom"
+
+#: index.php:116
+msgid "Surnom"
+msgstr "Nom"
+
+#: index.php:117
+msgid "Options"
+msgstr "Options"

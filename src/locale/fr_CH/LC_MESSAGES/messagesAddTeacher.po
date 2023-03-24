@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-24 11:25+0100\n"
+"PO-Revision-Date: 2023-03-24 12:07+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_CH\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: addTeacher.php:28
+msgid "Version statique de l'application des surnoms"
+msgstr "Version statique de l'application des surnoms"
+
+#: addTeacher.php:36
+msgid "Surnom des enseignants"
+msgstr "Surnom des enseignants"
+
+#: addTeacher.php:43
+msgid "Mot de passe"
+msgstr "Mot de passe"
+
+#: addTeacher.php:44
+msgid "Se connecter"
+msgstr "Se connecter"
+
+#: addTeacher.php:49
+msgid "Zone pour le menu"
+msgstr "Zone pour le menu"
+
+#: addTeacher.php:50
+msgid "Accueil"
+msgstr "Accueil"
+
+#: addTeacher.php:51
+msgid "Ajouter un enseignant"
+msgstr "Ajouter un enseignant"
+
+#: addTeacher.php:58
+msgid "Ajout d'un enseignant"
+msgstr "Ajouter un enseignant"
+
+#: addTeacher.php:61
+msgid "Homme"
+msgstr "Homme"
+
+#: addTeacher.php:63
+msgid "Femme"
+msgstr "Femme"
+
+#: addTeacher.php:65
+msgid "Autre"
+msgstr "Autre"
+
+#: addTeacher.php:68
+msgid "Nom :"
+msgstr "Nom :"
+
+#: addTeacher.php:72
+msgid "Prenom :"
+msgstr "Prénom :"
+
+#: addTeacher.php:76
+msgid "Surnom :"
+msgstr "Surnom :"
+
+#: addTeacher.php:80
+msgid "Origine :"
+msgstr "Origine :"
+
+#: addTeacher.php:86
+msgid "Section"
+msgstr "Section"
+
+#: addTeacher.php:87
+msgid "Informatique"
+msgstr "Informatique"
+
+#: addTeacher.php:88
+msgid "Bois"
+msgstr "Bois"
+
+#: addTeacher.php:92
+msgid "Ajouter"
+msgstr "Ajouter"
+
+#: addTeacher.php:93
+msgid "Effacer"
+msgstr "Effacer"
+
+#: addTeacher.php:98
+msgid "Retour a la page d'accueil"
+msgstr "Retour à la page d'accueil"
