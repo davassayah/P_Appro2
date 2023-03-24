@@ -13,10 +13,16 @@ $db = new Database();
 
 //Récupère les informations de l'enseignant grâce à l'id de l'enseignant dans l'url
 $teacher = $db->getOneTeacher($_GET["idTeacher"]);
+
+var_dump($teacher);
+
 //Si le formulaire a été envoyé, met à jour les informations de l'enseignant dont l'id est dans l'url et redirige sur la page d'accueil
-if ($_POST) {
+if ($_SERVER["REQUEST_METHOD"] === "POST")  {
     $db->UpdateTeacherById($_GET["idTeacher"], $_POST);
     header('Location: index.php');
+    die();
+} else {
+    $sections =$db->getAllSections();
 }
 
 ?>
@@ -90,8 +96,19 @@ if ($_POST) {
                     <select name="section" id="section">
                         <option value="">Section</option>
                         <!--Condition permettant de sélectionner la section de l'enseignant déjà renseigné-->
-                        <option value="info" <?php if ($teacher['secName'] == 'Informatique') { ?>selected<?php } ?>>Informatique</option>
-                        <option value="bois" <?php if ($teacher['secName'] == 'Bois') { ?>selected<?php } ?>>Bois</option>
+                        <?php 
+                        $html = "";
+                        foreach($sections as $section) {
+
+                            $html .= "<option value='" . $section["idSection"]  . "' ";
+                            if ($section["idSection"] === $teacher["fkSection"]) {
+
+                                $html .= " selected "; 
+                            }
+                            $html .= " >" . gettext($section["secName"]) . "</option>";
+                        } 
+                        echo $html;
+                        ?>
                     </select>
                 </p>
                 <p>

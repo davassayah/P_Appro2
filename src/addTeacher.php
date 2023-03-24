@@ -12,10 +12,13 @@ session_start();
 include("Database.php");
 $db = new Database();
 
-//Si le formulaire a été envoyé alors un nouvel utilisateur est crée 
-if ($_POST) {
+//Si le formulaire a été envoyé alors un nouvel enseignant est crée 
+if ($_SERVER["REQUEST_METHOD"] === "POST")  {
     $teachers = $db->InsertTeacher($_POST);
+} else {
+    $sections =$db->getAllSections();
 }
+
 
 putenv("LANG=" . $_SESSION["langID"]);
 setlocale(LC_ALL, $_SESSION["langID"]);
@@ -91,8 +94,14 @@ textdomain($domain);
                     <label style="display: none" for="section"></label>
                     <select name="section" id="section">
                         <option value=""><?php echo gettext("Section"); ?></option>
-                        <option value="info"><?php echo gettext("Informatique"); ?></option>
-                        <option value="bois"><?php echo gettext("Bois"); ?></option>
+                        <?php 
+                        $html = "";
+                        foreach($sections as $section) {
+
+                            $html .= "<option value='" . $section["idSection"]  . "'>"  . gettext($section["secName"]) . "</option>";
+                        } 
+                        echo $html;
+                        ?>
                     </select>
                 </p>
                 <p>
