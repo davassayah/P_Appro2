@@ -4,3 +4,7 @@ function confirmDelete(teacherId) {
         window.location.href = window.location.href + '?idTeacher=' + teacherId;
     }
 }
+
+// function alertModify(){
+//     alert("La modification a bien été effectuée")
+// }
