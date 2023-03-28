@@ -11,9 +11,35 @@
     include("Database.php");
     $db = new Database();
 
+    const ERRORVOID = "*Obligatoire";
+
     //declaration des variables
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        //Gestion du transfert de l'image
+        //prends le dossier actuel
+        $currentDirectory = getcwd();
+        //dossier vers lequel le fichier va être transféré
+        $uploadDirectoryImg = "\img\photos";
+        //Récupère le fichier
+        $downloadImg = $_FILES["downloadImg"];
+        //Récupère le nom du fichier
+        $fileNameImg = $_FILES['downloadImg']['name'];
+        //Récupère le nom temporaire du fichier
+        $fileTmpNameImg = $_FILES['downloadImg']['tmp_name'];
+        //Reprends l'extension du fichier transféré
+        $fileExtensionImg = strtolower(end(explode('.', $fileNameImg)));
+        //Definis l'extension du fichier apres l'avoir recuperee
+        $extensionImg = pathinfo($fileNameImg, PATHINFO_EXTENSION);
+        //Permet de donner un nom unique au fichier enregistre cote serveur
+        if (isset($_FILES['downloadImg'])) {
+            $fileNameImg = str_replace($fileNameImg, $teacher['teaPhoto'], $fileNameImg);
+        }
+        //Définis le chemin final avec le nom du fichier où va être transférer le fichier en lui donnant un nom unique
+        $uploadPathImg = $currentDirectory . $uploadDirectoryImg . "/" . basename($fileNameImg);
+        //permet de donner un nom final au fichier
+        $imgPath = $uploadDirectoryImg . $fileNameImg;
 
         $genre = $_POST["genre"];
         $firstName = $_POST["firstName"];
@@ -21,19 +47,23 @@
         $nickName = $_POST["nickName"];
         $origin = $_POST["origin"];
         $section = $_POST["section"];
+        $teacher = [$genre, $firstName, $name, $nickName, $origin, $imgPath, $section];
 
         $genreIsNotFilled = ($genre == null);
         $firstNameIsNotFilled = ($firstName == null);
         $nameIsNotFilled = ($name == null);
         $nickNameIsNotFilled = ($nickName == null);
         $sectionIsNotFilled = ($section == null);
+        $downloadImgIsNotFilled = ($downloadImg == null);
     }
 
-    const ERRORVOID = "*Obligatoire";
-
     //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
-    if ($_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled and !$nickNameIsNotFilled and !$sectionIsNotFilled) {
-        $db->UpdateTeacherById($_GET["idTeacher"], $_POST);
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled and !$nickNameIsNotFilled
+        and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($extensionImg == "jpg" or $extensionImg == "png")
+    ) {
+        move_uploaded_file($fileTmpNameImg, $uploadPathImg);
+        $db->UpdateTeacherById($_GET["idTeacher"], $teacher);
         //Essai d'afficher un message de confirmation de modification grâce à Javascript, sans succès
         // echo '<script type="text/javascript">
         //     function alertModify(){
@@ -43,12 +73,14 @@
         //   </script>';
         header('Location: index.php');
         die();
-    }
+    } else echo "Merci de vérifier que tous les champs sont bien remplis correctement";
 
     $sections = $db->getAllSections();
 
     //Récupère les informations de l'enseignant grâce à l'id de l'enseignant dans l'url
     $teacher = $db->getOneTeacher($_GET["idTeacher"]);
+
+    var_dump($_POST);
     ?>
 
   <!DOCTYPE html>
@@ -87,7 +119,7 @@
 
       <div class="container">
           <div class="user-body">
-              <form action="#" method="post" id="form">
+              <form action="#" method="post" id="form"  enctype="multipart/form-data">
                   <h3>Modifier un enseignant</h3>
                   <p>
                       <!--Condition permettant de sélectionner le genre de l'enseignant déjà renseigné-->
@@ -153,6 +185,25 @@
                   <p style="color:red;">
                       <?php if ($_POST and $sectionIsNotFilled) echo ERRORVOID;
                         ?>
+                  <p>
+                  <div>
+                      <img src=<?php echo $teacher["teaPhoto"] ?>>
+                  </div>
+                  <label for="downloadImg">Photo de l'enseignant (format jpg/png) :</label>
+                  <br>
+                  <input type="file" name="downloadImg" id="downloadImg" />
+                  <br>
+                  <a href="https://convertio.co/fr/convertisseur-jpg/">Convertissez votre fichier au format jpg/png en cliquant ici</a>
+                  <p style="color:red;">
+                      <?php if ($_POST and $downloadImgIsNotFilled) {
+                            echo ERRORVOID;
+                        } else if ($_POST and ($extensionImg != "jpg" and $extensionImg != "png")) {
+                            echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
+                        } else if ($extensionImg == "jpg" or $extensionImg == "png") {
+                            echo "Votre fichier a bien été téléchargé";
+                        }
+                        ?>
+                  </p>
                   <p>
                       <input type="submit" value="Modifier">
                   </p>

@@ -45,11 +45,9 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
 }
 
 $teachers = $db->getAllTeachers();
-
 //Récupère l'id de l'enseignant dans l'url pour le supprimer
 if ($id = $_GET['idTeacher']) {
     $db->DeleteTeacherById($id);
-    
     header('Location: index.php');
 }
 

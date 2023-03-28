@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db:3306
--- Généré le : ven. 24 mars 2023 à 12:35
+-- Généré le : mar. 28 mars 2023 à 06:55
 -- Version du serveur : 8.0.30
 -- Version de PHP : 8.0.27
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `P_Appro2`
 --
+CREATE DATABASE IF NOT EXISTS `P_Appro2` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `P_Appro2`;
 
 -- --------------------------------------------------------
 
@@ -54,19 +56,20 @@ CREATE TABLE `t_teacher` (
   `teaGender` char(1) NOT NULL,
   `teaNickname` varchar(50) NOT NULL,
   `teaOrigine` text NOT NULL,
+  `teaPhoto` varchar(75) NOT NULL,
   `fkSection` int NOT NULL
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
 -- Déchargement des données de la table `t_teacher`
 --
 
-INSERT INTO `t_teacher` (`idTeacher`, `teaFirstname`, `teaName`, `teaGender`, `teaNickname`, `teaOrigine`, `fkSection`) VALUES
-(1, 'Jean', 'Mi', 'A', 'JM', 'Surnom de Jean Mi', 3),
-(2, 'Jean', 'Mike', 'M', 'JMK', 'Surnom de Jean Mike', 1),
-(3, 'Jeanne', 'Mi', 'F', 'JMT', 'Surnom de Jeanne Mi', 3),
-(5, 'fwefsda', 'test2sadfsad', 'M', 'cdcd', 'cdcddcd', 3),
-(6, 'fecccccc', 'ffrfcccccc', 'A', 'ffrfrcccccccc', 'frfrfrccccc', 3);
+INSERT INTO `t_teacher` (`idTeacher`, `teaFirstname`, `teaName`, `teaGender`, `teaNickname`, `teaOrigine`,`teaPhoto`,`fkSection`) VALUES
+(1, 'Jean', 'Mi', 'A', 'JM', 'Surnom de Jean Mi','', 2),
+(2, 'Jean', 'Mike', 'M', 'JMK', 'Surnom de Jean Mike','', 1),
+(3, 'Jeanne', 'Mi', 'F', 'JMT', 'Surnom de Jeanne Mi','', 3),
+(47, 'test1', 'test1', 'A', 'test1', 'test1','', 1);
 
 -- --------------------------------------------------------
 
@@ -126,7 +129,7 @@ ALTER TABLE `t_section`
 -- AUTO_INCREMENT pour la table `t_teacher`
 --
 ALTER TABLE `t_teacher`
-  MODIFY `idTeacher` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idTeacher` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT pour la table `t_user`

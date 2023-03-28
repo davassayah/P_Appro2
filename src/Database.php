@@ -95,28 +95,37 @@ class Database
         return $Oneteacher[0];
     }
 
+    public function RenameFile()
+    {
+        $query = "
+        SELECT idTeacher FROM t_teacher ORDER BY idTeacher desc Limit 1";
+        $req = $this->querySimpleExecute($query);
+        $result = $this->formatData($req);
+        return  $result[0]['idTeacher'];
+    }
+
     /**
      * Fonction permettant de créer un nouvel enseignant
      * @param $teacher array | contient tous les attributs d'un enseignant a creer
      */
     public function InsertTeacher($teacher)
     {
-
         $query = "
-            INSERT INTO t_teacher (teaFirstname, teaName, teaGender, teaNickname, teaOrigine, fkSection) 
-            VALUES (:first_name, :last_name, :gender, :nick_name, :origin, :fk_section);
-        ";
+             INSERT INTO t_teacher (teaFirstname, teaName, teaGender, teaNickname, teaOrigine, teaPhoto, fkSection) 
+             VALUES (:first_name, :last_name, :gender, :nick_name, :origin, :teaPhoto, :fk_section);
+         ";
 
         $replacements = [
-            'first_name' => $teacher['firstName'],
-            'last_name' => $teacher['name'],
-            'gender' => $teacher['genre'],
-            'nick_name' => $teacher['nickName'],
-            'origin' => $teacher['origin'],
-            'fk_section' => $teacher['section'],
+            'first_name' => $teacher[1],
+            'last_name' => $teacher[2],
+            'gender' => $teacher[0],
+            'nick_name' => $teacher[3],
+            'origin' => $teacher[4],
+            'teaPhoto' => $teacher[5],
+            'fk_section' => $teacher[6],
         ];
 
-        $response = $this->queryPrepareExecute($query, $replacements);
+         $response = $this->queryPrepareExecute($query, $replacements);
     }
 
     /**
@@ -136,6 +145,7 @@ class Database
                 teaGender = :gender,
                 teaNickname = :nick_name,
                 teaOrigine = :origin,
+                teaPhoto = :teaPhoto,
                 fkSection = :fk_section
             WHERE
                 idTeacher = :id
@@ -148,6 +158,7 @@ class Database
             'gender' => $teacher['genre'],
             'nick_name' => $teacher['nickName'],
             'origin' => $teacher['origin'],
+            'teaPhoto' => $teacher['teaPhoto'],
             //Recupère l'id de la section grâce au nom de la section
             'fk_section' => $teacher['section'],
         ];

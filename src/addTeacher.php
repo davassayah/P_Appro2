@@ -13,36 +13,52 @@ session_start();
 include("Database.php");
 $db = new Database();
 
+const ERRORVOID = "*Obligatoire";
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $genre = $_POST["genre"];
-    $firstName = $_POST["firstName"];
-    $name = $_POST["name"];
-    $nickName = $_POST["nickName"];
-    $origin = $_POST["origin"];
-    $section = $_POST["section"];
+    //Gestion du transfert de l'image
+    //prends le dossier actuel
+    $currentDirectory = getcwd();
+    //dossier vers lequel le fichier va être transféré
+    $uploadDirectoryImg = "\img\photos";
+    //Récupère le fichier
+    $downloadImg = $_FILES["downloadImg"];
+    //Récupère le nom du fichier
+    $fileNameImg = $_FILES['downloadImg']['name'];
+    //Récupère le nom temporaire du fichier
+    $fileTmpNameImg = $_FILES['downloadImg']['tmp_name'];
+    //Reprends l'extension du fichier transféré
+    $fileExtensionImg = strtolower(end(explode('.', $fileNameImg)));
+    //Definis l'extension du fichier apres l'avoir recuperee
+    $extensionImg = pathinfo($fileNameImg, PATHINFO_EXTENSION);
+    //Permet de donner un nom unique au fichier enregistre cote serveur
+    $nameId = $db->RenameFile();
+    $ImgNewName = "\Img_" . $nameId + 1 . "." . $extensionImg;
+    //Permet de supprimer le nom donne au fichier par l'utilisateur et de le remplacer par le nom desire
+    if (isset($_FILES['downloadImg'])) {
+        $fileNameImg = str_replace($fileNameImg, $ImgNewName, $fileNameImg);
+    }
+    //Définis le chemin final avec le nom du fichier où va être transférer le fichier en lui donnant un nom unique
+    $uploadPathImg = $currentDirectory . $uploadDirectoryImg . "/" . basename($fileNameImg);
+    //permet de donner un nom final au fichier
+    $imgPath = $uploadDirectoryImg . $fileNameImg;
 
-    var_dump($_POST["section"]);
-
-    //$tabs["errorVoid"]=1;
+    $genre = $_POST["genre"] ?? '';
+    $firstName = $_POST["firstName"] ?? '';
+    $name = $_POST["name"] ?? '';
+    $nickName = $_POST["nickName"] ?? '';
+    $origin = $_POST["origin"] ?? '';
+    $section = $_POST["section"] ?? '';
+    //bien regarder l'ordre par rapport à la base de données
+    $teacher = [$genre, $firstName, $name, $nickName, $origin, $imgPath, $section];
 
     $genreIsNotFilled = ($genre == null);
     $firstNameIsNotFilled = ($firstName == null);
     $nameIsNotFilled = ($name == null);
     $nickNameIsNotFilled = ($nickName == null);
     $sectionIsNotFilled = ($section == null);
-}
-
-const ERRORVOID = "*Obligatoire";
-
-//Si le formulaire a été envoyé alors un nouvel enseignant est crée 
-if ($_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled and !$nickNameIsNotFilled and !$sectionIsNotFilled) {
-    $teachers = $db->InsertTeacher($_POST);
-    $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
-} else {
-    if ($_POST) {
-        $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
-    }
+    $downloadImgIsNotFilled = ($downloadImg == null);
 }
 
 $sections = $db->getAllSections();
@@ -52,6 +68,20 @@ setlocale(LC_ALL, $_SESSION["langID"]);
 $domain = "messagesAddTeacher";
 bindtextdomain($domain, "locale");
 textdomain($domain);
+
+//Si le formulaire a été envoyé alors un nouvel enseignant est crée 
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled
+    and !$nickNameIsNotFilled and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($extensionImg == "jpg" or $extensionImg == "png")
+) {
+    move_uploaded_file($fileTmpNameImg, $uploadPathImg);
+    $teachers = $db->InsertTeacher($teacher);
+    $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
+} else {
+    if ($_POST) {
+        $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -91,7 +121,7 @@ textdomain($domain);
 
     <div class="container">
         <div class="user-body">
-            <form action="#" method="post" id="form">
+            <form action="#" method="post" id="form" enctype="multipart/form-data">
                 <h3><?php echo gettext("Ajout d'un enseignant"); ?></h3>
                 <br>
                 <p style="color:red;">
@@ -154,9 +184,26 @@ textdomain($domain);
                     ?>
                 </p>
                 <p>
+                    <label for="downloadImg">Photo de l'enseignant (format jpg/png) :</label>
+                    <br>
+                    <input type="file" name="downloadImg" id="downloadImg" />
+                    <br>
+                    <a href="https://convertio.co/fr/convertisseur-jpg/">Convertissez votre fichier au format jpg/png en cliquant ici</a>
+                <p style="color:red;">
+                    <?php if ($_POST and $downloadImgIsNotFilled) {
+                        echo ERRORVOID;
+                    } else if ($_POST and ($extensionImg != "jpg" and $extensionImg != "png")) {
+                        echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
+                    } else if ($extensionImg == "jpg" or $extensionImg == "png") {
+                        echo "Votre fichier a bien été téléchargé";
+                    }
+                    ?>
+                </p>
+                <p>
                     <input type="submit" value=<?php echo gettext("Ajouter"); ?>>
                     <button type="button" onclick="document.getElementById('form').reset();"><?php echo gettext("Effacer"); ?></button>
-                </p>            </form>
+                </p>
+            </form>
         </div>
         <div class="user-footer">
             <a href="index.php"><?php echo gettext("Retour a la page d'accueil"); ?></a>
