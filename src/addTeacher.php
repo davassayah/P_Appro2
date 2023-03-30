@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nickNameIsNotFilled = ($nickName == null);
     $sectionIsNotFilled = ($section == null);
     $downloadImgIsNotFilled = ($downloadImg == null);
+
 }
 
 $sections = $db->getAllSections();
