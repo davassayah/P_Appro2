@@ -142,3 +142,18 @@ label {
     align-items: center;
     width: 30%;
 }
+
+/* .sort-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  } */
