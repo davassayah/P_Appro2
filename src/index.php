@@ -37,6 +37,14 @@ if ($id = $_GET['idTeacher']) {
     header('Location: index.php');
 }
 
+// Vérifie si le formulaire a été soumis
+if (isset($_POST['submit'])) {
+    // Récupère la valeur entrée dans le champ de texte
+    $searchValue = $_POST['search'];
+    $teachers = $db->sortTeachers($searchValue);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -56,16 +64,10 @@ if ($id = $_GET['idTeacher']) {
             <div class="titre-header">
                 <h1>Surnom des enseignants</h1>
             </div>
-            <form name="langSelect" action="" method="get">
-                <select name="langID" id="langID">
-                    <option>
-                        <p>Choisissez une langue</p>
-                    </option>
-                    <option value="fr_CH"><?php echo gettext('Francais'); ?></option>
-                    <option value="en_US"><?php echo gettext('Anglais'); ?></option>
-                </select>
-                <br /><br />
-                <button type="submit"><?php echo gettext('Submit'); ?></button>
+            <form method="post" action="">
+                <label for="search">Rechercher :</label>
+                <input type="text" name="search" id="search">
+                <input type="submit" name="submit" value="Rechercher">
             </form>
             <div class="login-container">
                 <form action="" method="post">

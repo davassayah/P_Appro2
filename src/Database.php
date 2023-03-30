@@ -125,7 +125,7 @@ class Database
             'fk_section' => $teacher[6],
         ];
 
-         $response = $this->queryPrepareExecute($query, $replacements);
+        $response = $this->queryPrepareExecute($query, $replacements);
     }
 
     /**
@@ -207,5 +207,25 @@ class Database
 
         //Retourne les données de l'utilisateur
         return $this->formatData($req)[0];
+    }
+
+    public function sortTeachers($searchValue)
+    {
+        $query = "
+        SELECT * 
+        FROM t_teacher
+        WHERE teaName 
+        LIKE :searchValue 
+        ORDER BY teaName 
+        ASC";
+    
+        $replacements = [
+            'searchValue' => '%' . $searchValue . '%',
+        ];
+    
+        $req = $this->queryPrepareExecute($query, $replacements);
+        $filtres = $this->formatData($req);
+    
+        return $filtres;
     }
 }
