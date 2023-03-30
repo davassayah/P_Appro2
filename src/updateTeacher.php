@@ -13,7 +13,6 @@
 
     const ERRORVOID = "*Obligatoire";
 
-
     //Récupère les informations de l'enseignant grâce à l'id de l'enseignant dans l'url
     $teacher = $db->getOneTeacher($_GET["idTeacher"]);
 
@@ -53,7 +52,7 @@
         $nickName = $_POST["nickName"];
         $origin = $_POST["origin"];
         $section = $_POST["section"];
-        $teacher = [$firstName, $name, $genre, $nickName, $origin, $imgPath, $section];
+        $teacherArray = [$firstName, $name, $genre, $nickName, $origin, $imgPath, $section];
 
         $genreIsNotFilled = ($genre == null);
         $firstNameIsNotFilled = ($firstName == null);
@@ -61,6 +60,21 @@
         $nickNameIsNotFilled = ($nickName == null);
         $sectionIsNotFilled = ($section == null);
         $downloadImgIsNotFilled = ($downloadImg == null);
+
+        if (isset($_FILES['downloadImg'])) {
+
+            $filePath = "." . $teacherArray[5];
+
+            if (file_exists($filePath)) {
+                if (unlink($filePath)) {
+                    echo 'File deleted successfully.';
+                } else {
+                    echo 'Unable to delete file.';
+                }
+            } else {
+                echo 'File does not exist.';
+            }
+        }
     }
 
     //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
@@ -68,8 +82,10 @@
         $_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled and !$nickNameIsNotFilled
         and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($extensionImg == "jpg" or $extensionImg == "png")
     ) {
-        move_uploaded_file($fileTmpNameImg, $uploadPathImg);
-        $db->UpdateTeacherById($_GET["idTeacher"], $teacher);
+        // move_uploaded_file($fileTmpNameImg, $uploadPathImg);
+        move_uploaded_file($fileTmpNameImg, $filePath);
+
+        $db->UpdateTeacherById($_GET["idTeacher"], $teacherArray);
         //Essai d'afficher un message de confirmation de modification grâce à Javascript, sans succès
         // echo '<script type="text/javascript">
         //     function alertModify(){
