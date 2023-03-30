@@ -13,7 +13,9 @@
 
     const ERRORVOID = "*Obligatoire";
 
-    //declaration des variables
+
+    //Récupère les informations de l'enseignant grâce à l'id de l'enseignant dans l'url
+    $teacher = $db->getOneTeacher($_GET["idTeacher"]);
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -33,21 +35,25 @@
         //Definis l'extension du fichier apres l'avoir recuperee
         $extensionImg = pathinfo($fileNameImg, PATHINFO_EXTENSION);
         //Permet de donner un nom unique au fichier enregistre cote serveur
+
         if (isset($_FILES['downloadImg'])) {
+
             $fileNameImg = str_replace($fileNameImg, $teacher['teaPhoto'], $fileNameImg);
         }
         //Définis le chemin final avec le nom du fichier où va être transférer le fichier en lui donnant un nom unique
-        $uploadPathImg = $currentDirectory . $uploadDirectoryImg . "/" . basename($fileNameImg);
-        //permet de donner un nom final au fichier
-        $imgPath = $uploadDirectoryImg . $fileNameImg;
+        $uploadPathImg = $uploadDirectoryImg . $fileNameImg;
 
+        //permet de donner un nom final au fichier
+        $imgPath = $teacher['teaPhoto'];
+
+        //declaration des variables
         $genre = $_POST["genre"];
         $firstName = $_POST["firstName"];
         $name = $_POST["name"];
         $nickName = $_POST["nickName"];
         $origin = $_POST["origin"];
         $section = $_POST["section"];
-        $teacher = [$genre, $firstName, $name, $nickName, $origin, $imgPath, $section];
+        $teacher = [$firstName, $name, $genre, $nickName, $origin, $imgPath, $section];
 
         $genreIsNotFilled = ($genre == null);
         $firstNameIsNotFilled = ($firstName == null);
@@ -77,10 +83,6 @@
 
     $sections = $db->getAllSections();
 
-    //Récupère les informations de l'enseignant grâce à l'id de l'enseignant dans l'url
-    $teacher = $db->getOneTeacher($_GET["idTeacher"]);
-
-    var_dump($_POST);
     ?>
 
   <!DOCTYPE html>
@@ -119,7 +121,7 @@
 
       <div class="container">
           <div class="user-body">
-              <form action="#" method="post" id="form"  enctype="multipart/form-data">
+              <form action="#" method="post" id="form" enctype="multipart/form-data">
                   <h3>Modifier un enseignant</h3>
                   <p>
                       <!--Condition permettant de sélectionner le genre de l'enseignant déjà renseigné-->

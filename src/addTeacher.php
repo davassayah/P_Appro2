@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $origin = $_POST["origin"] ?? '';
     $section = $_POST["section"] ?? '';
     //bien regarder l'ordre par rapport à la base de données
-    $teacher = [$genre, $firstName, $name, $nickName, $origin, $imgPath, $section];
+    $teacher = [ $firstName, $name,$genre, $nickName, $origin, $imgPath, $section];
 
     $genreIsNotFilled = ($genre == null);
     $firstNameIsNotFilled = ($firstName == null);

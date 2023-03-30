@@ -116,9 +116,9 @@ class Database
          ";
 
         $replacements = [
-            'first_name' => $teacher[1],
-            'last_name' => $teacher[2],
-            'gender' => $teacher[0],
+            'first_name' => $teacher[0],
+            'last_name' => $teacher[1],
+            'gender' => $teacher[2],
             'nick_name' => $teacher[3],
             'origin' => $teacher[4],
             'teaPhoto' => $teacher[5],
@@ -153,18 +153,17 @@ class Database
 
         $replacements = [
             'id' => $id,
-            'first_name' => $teacher['firstName'],
-            'last_name' => $teacher['name'],
-            'gender' => $teacher['genre'],
-            'nick_name' => $teacher['nickName'],
-            'origin' => $teacher['origin'],
-            'teaPhoto' => $teacher['teaPhoto'],
-            //Recupère l'id de la section grâce au nom de la section
-            'fk_section' => $teacher['section'],
+            'first_name' => $teacher[0],
+            'last_name' => $teacher[1],
+            'gender' => $teacher[2],
+            'nick_name' => $teacher[3],
+            'origin' => $teacher[4],
+            'teaPhoto' => $teacher[5],
+            'fk_section' => $teacher[6],
         ];
-
         $this->queryPrepareExecute($query, $replacements);
     }
+
 
 
     /**
