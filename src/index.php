@@ -44,7 +44,6 @@ if (isset($_POST['submit'])) {
     $teachers = $db->sortTeachers($searchValue);
 }
 
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -101,9 +100,19 @@ if (isset($_POST['submit'])) {
             <table>
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Surnom</th>
-                        <th>Options</th>
+                        <th>
+                            Nom
+                            <br>
+                            <a href="#" class="sort-btn" onclick="sortTable('teaName')">Trier</a>
+                        </th>
+                        <th>
+                            Surnom
+                            <br>
+                            <a href="#" class="sort-btn">Trier</a>
+                        </th>
+                        <th>
+                            Options
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
