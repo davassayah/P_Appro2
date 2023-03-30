@@ -100,6 +100,9 @@ textdomain($domain);
                 <p><?php echo gettext("Surnom :"); echo $OneTeacher["teaNickname"]  ?></p>
                 <p> <?php echo $OneTeacher["teaOrigine"]  ?></p>
             </div>
+            <div>
+            <img src=<?php echo $OneTeacher["teaPhoto"]?>>
+            </div>
         </div>
         <div class="user-footer">
             <a href="index.html"><p><?php echo gettext("Retour a la page d'accueil")?></a>
