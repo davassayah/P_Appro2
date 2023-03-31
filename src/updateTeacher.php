@@ -7,7 +7,7 @@
      */
 
     session_start();
-
+    include("uploadImages/UpdateImages.php");
     include("Database.php");
     $db = new Database();
 
@@ -18,84 +18,33 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        //Gestion du transfert de l'image
-        //prends le dossier actuel
-        $currentDirectory = getcwd();
-        //dossier vers lequel le fichier va être transféré
-        $uploadDirectoryImg = "\img\photos";
-        //Récupère le fichier
-        $downloadImg = $_FILES["downloadImg"];
-        //Récupère le nom du fichier
-        $fileNameImg = $_FILES['downloadImg']['name'];
-        //Récupère le nom temporaire du fichier
-        $fileTmpNameImg = $_FILES['downloadImg']['tmp_name'];
-        //Reprends l'extension du fichier transféré
-        $fileExtensionImg = strtolower(end(explode('.', $fileNameImg)));
-        //Definis l'extension du fichier apres l'avoir recuperee
-        $extensionImg = pathinfo($fileNameImg, PATHINFO_EXTENSION);
-        //Permet de donner un nom unique au fichier enregistre cote serveur
+        // 
+        $imageData = UpdateImages($_FILES, $teacher);
+        $_POST["imgPath"] = $imageData["imgPath"];
 
-        if (isset($_FILES['downloadImg'])) {
+var_dump($imageData);
 
-            $fileNameImg = str_replace($fileNameImg, $teacher['teaPhoto'], $fileNameImg);
-        }
-        //Définis le chemin final avec le nom du fichier où va être transférer le fichier en lui donnant un nom unique
-        $uploadPathImg = $uploadDirectoryImg . $fileNameImg;
+        $genreIsNotFilled =  ($_POST["genre"] == null);
+        $firstNameIsNotFilled = ($_POST["firstName"] == null);
+        $nameIsNotFilled = ($_POST["name"] == null);
+        $nickNameIsNotFilled = ($_POST["nickName"] == null);
+        $sectionIsNotFilled = ($_POST["section"] == null);
+        $downloadImgIsNotFilled = ($imageData["downloadImg"] == null);
 
-        //permet de donner un nom final au fichier
-        $imgPath = $teacher['teaPhoto'];
-
-        //declaration des variables
-        $genre = $_POST["genre"];
-        $firstName = $_POST["firstName"];
-        $name = $_POST["name"];
-        $nickName = $_POST["nickName"];
-        $origin = $_POST["origin"];
-        $section = $_POST["section"];
-        $teacherArray = [$firstName, $name, $genre, $nickName, $origin, $imgPath, $section];
-
-        $genreIsNotFilled = ($genre == null);
-        $firstNameIsNotFilled = ($firstName == null);
-        $nameIsNotFilled = ($name == null);
-        $nickNameIsNotFilled = ($nickName == null);
-        $sectionIsNotFilled = ($section == null);
-        $downloadImgIsNotFilled = ($downloadImg == null);
-
-        if (isset($_FILES['downloadImg'])) {
-
-            $filePath = "." . $teacherArray[5];
-
-            if (file_exists($filePath)) {
-                if (unlink($filePath)) {
-                    echo 'File deleted successfully.';
-                } else {
-                    echo 'Unable to delete file.';
-                }
-            } else {
-                echo 'File does not exist.';
-            }
-        }
     }
 
     //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
     if (
         $_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled and !$nickNameIsNotFilled
-        and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($extensionImg == "jpg" or $extensionImg == "png")
+        and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($imageData["extensionImg"] == "jpg" or $imageData["extensionImg"] == "png")
     ) {
-        // move_uploaded_file($fileTmpNameImg, $uploadPathImg);
-        move_uploaded_file($fileTmpNameImg, $filePath);
-
-        $db->UpdateTeacherById($_GET["idTeacher"], $teacherArray);
-        //Essai d'afficher un message de confirmation de modification grâce à Javascript, sans succès
-        // echo '<script type="text/javascript">
-        //     function alertModify(){
-        //         alert("La modification a bien été effectuée");
-        //     }
-        //     setTimeout(alertModify, 10000); 
-        //   </script>';
+         move_uploaded_file($imageData["fileTmpNameImg"], $imageData["filePath"]);
+        $db->UpdateTeacherById($_GET["idTeacher"], $_POST);
         header('Location: index.php');
         die();
-    } else echo "Merci de vérifier que tous les champs sont bien remplis correctement";
+    } else {
+        echo "Merci de vérifier que tous les champs sont bien remplis correctement";
+    }
 
     $sections = $db->getAllSections();
 
@@ -213,11 +162,9 @@
                   <br>
                   <a href="https://convertio.co/fr/convertisseur-jpg/">Convertissez votre fichier au format jpg/png en cliquant ici</a>
                   <p style="color:red;">
-                      <?php if ($_POST and $downloadImgIsNotFilled) {
-                            echo ERRORVOID;
-                        } else if ($_POST and ($extensionImg != "jpg" and $extensionImg != "png")) {
+                      <?php if ($_POST and ($imageData["extensionImg"] != "jpg" and $imageData["extensionImg"] != "png")) {
                             echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                        } else if ($extensionImg == "jpg" or $extensionImg == "png") {
+                        } else if ($imageData["extensionImg"] == "jpg" or $imageData["extensionImg"] == "png") {
                             echo "Votre fichier a bien été téléchargé";
                         }
                         ?>

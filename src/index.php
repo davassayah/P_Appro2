@@ -20,12 +20,6 @@ if (isset($_GET["langID"])) {
     $_SESSION["langID"] = $_GET["langID"];
 }
 
-putenv("LANG=" . $_SESSION["langID"]);
-setlocale(LC_ALL, $_SESSION["langID"]);
-$domain = "messagesIndex";
-bindtextdomain($domain, "locale");
-textdomain($domain);
-
 //Vérifie les identifiants de l'utilisateur grâce à la méthode CheckAuth. Si les informations n'existent ou ne correspondent pas, la valeur est nulle et une erreur s'affiche.
 //Si la valeur de $user n'est pas null (les identifiants sont valides) l'utilisateur est connecté en tant qu'utilisateur si la valeur de userAdministrator est 0.
 //Si la valeur de userAdministrator est 1 l'utilisateur est connecté en tant qu'administrateur et la valeur de userConnected est 2.
@@ -60,7 +54,7 @@ if ($id = $_GET['idTeacher']) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/style.css" rel="stylesheet">
-    <title><?php echo gettext("Version statique de l'application des surnoms"); ?> </title>
+    <title>Version statique de l'application des surnoms</title>
 </head>
 
 <body>
@@ -68,18 +62,18 @@ if ($id = $_GET['idTeacher']) {
     <header>
         <div class="container-header">
             <div class="titre-header">
-                <h1><?php echo gettext('Surnom des enseignants'); ?></h1>
+                <h1>Surnom des enseignants</h1>
             </div>
             <form name="langSelect" action="" method="get">
                 <select name="langID" id="langID">
                     <option>
-                        <p><?php echo gettext('Choisissez une langue'); ?></p>
+                        <p>Choisissez une langue</p>
                     </option>
-                    <option value="fr_CH"><?php echo gettext('Francais'); ?></option>
-                    <option value="en_US"><?php echo gettext('Anglais'); ?></option>
+                    <option value="fr_CH">Francais</option>
+                    <option value="en_US">Anglais</option>
                 </select>
                 <br /><br />
-                <button type="submit"><?php echo gettext('Submit'); ?></button>
+                <button type="submit">Submit</button>
 
             </form>
             <div class="login-container">
@@ -87,8 +81,8 @@ if ($id = $_GET['idTeacher']) {
                     <label for="user"> </label>
                     <input type="text" name="user" id="user" placeholder="Login">
                     <label for="password"> </label>
-                    <input type="password" name="password" id="password" placeholder=<?php echo gettext('Mot de passe'); ?>>
-                    <button type="submit" class="btn btn-login"><?php echo gettext('Se connecter'); ?></button>
+                    <input type="password" name="password" id="password" placeholder="Mot de passe">>
+                    <button type="submit" class="btn btn-login">Se connecter</button>
                     <div class="col-md-6">
                     </div>
                 </form>
@@ -96,10 +90,10 @@ if ($id = $_GET['idTeacher']) {
         </div>
         <nav>
             <!--Affiche certaines fonctionnalités selon que l'utilisateur soit connecté en tant qu'utilisateur ou en tant qu'admin-->
-            <h2><?php echo gettext('Zone pour le menu'); ?></h2>
+            <h2>Zone pour le menu</h2>
             <?php if ($_SESSION['userConnected'] >= 1) {
             ?>
-                <a href="index.php"><?php echo gettext('Accueil'); ?> </a>
+                <a href="index.php">Accueil</a>
                 <?php if ($_SESSION['userConnected'] == 2) {
                 ?>
                     <a href="addTeacher.php"><?php echo gettext('Ajouter un enseignant'); ?></a>
