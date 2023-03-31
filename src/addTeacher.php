@@ -7,7 +7,6 @@
  * Description: Page permettant d'ajouter un enseignant à la db
  */
 
-
 session_start();
 
 include("Database.php");
@@ -64,12 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $sections = $db->getAllSections();
 
-putenv("LANG=" . $_SESSION["langID"]);
-setlocale(LC_ALL, $_SESSION["langID"]);
-$domain = "messagesAddTeacher";
-bindtextdomain($domain, "locale");
-textdomain($domain);
-
 //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
 if (
     $_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled
@@ -93,7 +86,7 @@ if (
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/style.css" rel="stylesheet">
-    <title><?php echo gettext("Version statique de l'application des surnoms"); ?></title>
+    <title>Version statique de l'application des surnoms</title>
 </head>
 
 <body>
@@ -101,46 +94,46 @@ if (
     <header>
         <div class="container-header">
             <div class="titre-header">
-                <h1><?php echo gettext("Surnom des enseignants"); ?></h1>
+                <h1>Surnom des enseignants</h1>
             </div>
             <div class="login-container">
                 <form action="#" method="post">
                     <label for="user"> </label>
                     <input type="text" name="user" id="user" placeholder="Login">
                     <label for="password"> </label>
-                    <input type="password" name="password" id="password" placeholder=<?php echo gettext('Mot de passe'); ?>>
-                    <button type="submit" class="btn btn-login"><?php echo gettext("Se connecter"); ?></button>
+                    <input type="password" name="password" id="password" placeholder="Mot de passe">
+                    <button type="submit" class="btn btn-login">Se connecter</button>
                 </form>
             </div>
         </div>
         <nav>
-            <h2><?php echo gettext('Zone pour le menu'); ?></h2>
-            <a href="index.php"><?php echo gettext('Accueil'); ?> </a>
-            <a href="addTeacher.php"><?php echo gettext('Ajouter un enseignant'); ?></a>
+            <h2>Zone pour le menu</h2>
+            <a href="index.php">Accueil</a>
+            <a href="addTeacher.php">Ajouter un enseignant</a>
         </nav>
     </header>
 
     <div class="container">
         <div class="user-body">
             <form action="#" method="post" id="form" enctype="multipart/form-data">
-                <h3><?php echo gettext("Ajout d'un enseignant"); ?></h3>
+                <h3>Ajout d'un enseignant</h3>
                 <br>
                 <p style="color:red;">
                     <?php echo $errorOrValidationMessage ?>
                 </p>
                 <p>
                     <input type="radio" id="genre1" name="genre" value="M" checked>
-                    <label for="genre1"><?php echo gettext("Homme"); ?></label>
+                    <label for="genre1">Homme</label>
                     <input type="radio" id="genre2" name="genre" value="F">
-                    <label for="genre2"><?php echo gettext("Femme"); ?></label>
+                    <label for="genre2">Femme</label>
                     <input type="radio" id="genre3" name="genre" value="A">
-                    <label for="genre3"><?php echo gettext("Autre"); ?></label>
+                    <label for="genre3">Autre</label>
                 <p style="color:red;">
                     <?php if ($_POST and $genreIsNotFilled) echo ERRORVOID;
                     ?>
                 </p>
                 <p>
-                    <label for="firstName"><?php echo gettext("Prénom :"); ?></label>
+                    <label for="firstName">Prénom :</label>
                     <input type="text" name="firstName" id="firstName" value=<?php if (isset($firstname)) echo $firstname ?>>
                 <p style="color:red;">
                     <?php if ($_POST and $firstNameIsNotFilled) echo ERRORVOID;
@@ -148,7 +141,7 @@ if (
                 </p>
                 </p>
                 <p>
-                    <label for="name"><?php echo gettext("Nom :"); ?>:</label>
+                    <label for="name">Nom :</label>
                     <input type="text" name="name" id="name" value=<?php if (isset($name)) echo $name ?>>
                 <p style="color:red;">
                     <?php if ($_POST and $nameIsNotFilled) echo ERRORVOID;
@@ -156,25 +149,25 @@ if (
                 </p>
                 </p>
                 <p>
-                    <label for="nickName"><?php echo gettext("Surnom :"); ?></label>
+                    <label for="nickName">Surnom :</label>
                     <input type="text" name="nickName" id="nickName" value=<?php if (isset($nickName)) echo $nickName ?>>
                 <p style="color:red;">
                     <?php if ($_POST and $nickNameIsNotFilled) echo ERRORVOID;
                     ?>
                 </p>
                 <p>
-                    <label for="origin"><?php echo gettext("Origine :"); ?></label>
+                    <label for="origin">Origine :</label>
                     <textarea name="origin" id="origin"></textarea>
                 </p>
                 <p>
                     <label style="display: none" for="section"></label>
                     <select name="section" id="section">
-                        <option value=""><?php echo gettext("Section"); ?></option>
+                        <option value="">Section</option>
                         <?php
                         $html = "";
                         foreach ($sections as $section) {
 
-                            $html .= "<option value='" . $section["idSection"]  . "'>"  . gettext($section["secName"]) . "</option>";
+                            $html .= "<option value='" . $section["idSection"]  . "'>"  . ($section["secName"]) . "</option>";
                         }
                         echo $html;
                         ?>
@@ -201,13 +194,13 @@ if (
                     ?>
                 </p>
                 <p>
-                    <input type="submit" value=<?php echo gettext("Ajouter"); ?>>
-                    <button type="button" onclick="document.getElementById('form').reset();"><?php echo gettext("Effacer"); ?></button>
+                    <input type="submit" value="Ajouter">
+                    <button type="button" onclick="document.getElementById('form').reset();">Effacer</button>
                 </p>
             </form>
         </div>
         <div class="user-footer">
-            <a href="index.php"><?php echo gettext("Retour a la page d'accueil"); ?></a>
+            <a href="index.php">Retour a la page d'accueil</a>
         </div>
     </div>
 
