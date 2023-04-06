@@ -13,12 +13,6 @@ $db = new Database();
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url
 $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
 
-putenv("LANG=" . $_SESSION["langID"]);
-setlocale(LC_ALL, $_SESSION["langID"]);
-$domain = "messagesDetailTeacher";
-bindtextdomain($domain, "locale");
-textdomain($domain);
-
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +23,7 @@ textdomain($domain);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/style.css" rel="stylesheet">
-    <title><?php echo gettext("Version statique de l'application des surnoms"); ?></title>
+    <title>Version statique de l'application des surnoms</title>
 </head>
 
 <body>
@@ -37,28 +31,28 @@ textdomain($domain);
     <header>
         <div class="container-header">
             <div class="titre-header">
-                <h1><?php echo gettext("Surnom des enseignants"); ?></h1>
+                <h1>Surnom des enseignants</h1>
             </div>
             <div class="login-container">
                 <form action="#" method="post">
                     <label for="user"> </label>
                     <input type="text" name="user" id="user" placeholder="Login">
                     <label for="password"> </label>
-                    <input type="password" name="password" id="password" placeholder=<?php echo gettext("Mot de passe"); ?>>
-                    <button type="submit" class="btn btn-login"><?php echo gettext("Se connecter"); ?></button>
+                    <input type="password" name="password" id="password" placeholder="Mot de passe">>
+                    <button type="submit" class="btn btn-login">Se connecter</button>
                 </form>
             </div>
         </div>
         <!--Si l'utilisateur est connecté en tant qu'utilisateur (valeur 1) il n'a pas la possibilité d'ajouter un enseignant tandis que s'il est
         est connecté en tant qu'administrateur (valeur 2) il a la possibilité d'ajouter un enseignant-->
         <nav>
-            <h2><?php echo gettext("Zone pour le menu"); ?></h2>
+            <h2>Zone pour le menu</h2>
             <?php if ($_SESSION['userConnected'] >= 1) {
             ?>
-                <a href="index.php"><?php echo gettext("Accueil"); ?></a>
+                <a href="index.php">Accueil</a>
                 <?php if ($_SESSION['userConnected'] == 2) {
                 ?>
-                    <a href="addTeacher.php"><?php echo gettext("Ajouter un enseignant"); ?></a>
+                    <a href="addTeacher.php">Ajouter un enseignant</a>
                 <?php } ?>
 
         </nav>
@@ -67,7 +61,7 @@ textdomain($domain);
 
     <div class="container">
         <div class="user-head">
-            <h3><?php echo gettext("Detail :"); ?><?php
+            <h3>Detail :<?php
                             echo $OneTeacher["teaName"] . " " . $OneTeacher["teaFirstname"] ?>
                 <?php
                 //Affiche une image différente en fonction du genre de l'enseignant (se base sur la valeur de teaGender)
@@ -97,15 +91,15 @@ textdomain($domain);
         </div>
         <div class="user-body">
             <div class="left">
-                <p><?php echo gettext("Surnom :"); echo $OneTeacher["teaNickname"]  ?></p>
-                <p> <?php echo $OneTeacher["teaOrigine"]  ?></p>
+                <p>Surnom :<?php echo $OneTeacher["teaNickname"] ?></p>
+                <p> <?php echo $OneTeacher["teaOrigine"] ?></p>
             </div>
             <div>
-            <img src=<?php echo $OneTeacher["teaPhoto"]?>>
+            <img src="<?php echo $OneTeacher["teaPhoto"] ?>">
             </div>
         </div>
         <div class="user-footer">
-            <a href="index.html"><p><?php echo gettext("Retour a la page d'accueil")?></a>
+            <a href="index.html"><p>Retour a la page d'accueil</a>
         </div>
 
     </div>

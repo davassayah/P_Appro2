@@ -107,28 +107,26 @@ class Database
     /**
      * Fonction permettant de créer un nouvel enseignant
      * @param $teacher array | contient tous les attributs d'un enseignant a creer
+     * @param $imgData array | contient touts les attributs de l'image a uploader
      */
-    public function InsertTeacher($teacher)
+    public function InsertTeacher($teacher, $imgData)
     {
-
-
         $query = "
-             INSERT INTO t_teacher (teaFirstname, teaName, teaGender, teaNickname, teaOrigine, teaPhoto, fkSection) 
-             VALUES (:first_name, :last_name, :gender, :nick_name, :origin, :teaPhoto, :fk_section);
-         ";
+            INSERT INTO t_teacher (teaFirstname, teaName, teaGender, teaNickname, teaOrigine, teaPhoto, fkSection) 
+            VALUES (:first_name, :last_name, :gender, :nick_name, :origin, :teaPhoto, :fk_section);
+        ";
 
         $replacements = [
-            
-            'first_name' => $teacher[0],
-            'last_name' => $teacher[1],
-            'gender' => $teacher[2],
-            'nick_name' => $teacher[3],
-            'origin' => $teacher[4],
-            'teaPhoto' => $teacher[5],
-            'fk_section' => $teacher[6],
+            'first_name' => $teacher['firstName'],
+            'last_name' => $teacher['name'],
+            'gender' => $teacher['genre'],
+            'nick_name' => $teacher['nickName'],
+            'origin' => $teacher['origin'],
+            'teaPhoto' => $imgData['fileNameImg'],
+            'fk_section' => $teacher['section'],
         ];
 
-         $response = $this->queryPrepareExecute($query, $replacements);
+        $response = $this->queryPrepareExecute($query, $replacements);
     }
 
     /**

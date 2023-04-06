@@ -12,14 +12,6 @@ session_start();
 include("Database.php");
 $db = new Database();
 
-if (!isset($_SESSION["langID"])) {
-    $_SESSION["lang"] = "fr_CH";
-}
-
-if (isset($_GET["langID"])) {
-    $_SESSION["langID"] = $_GET["langID"];
-}
-
 //Vérifie les identifiants de l'utilisateur grâce à la méthode CheckAuth. Si les informations n'existent ou ne correspondent pas, la valeur est nulle et une erreur s'affiche.
 //Si la valeur de $user n'est pas null (les identifiants sont valides) l'utilisateur est connecté en tant qu'utilisateur si la valeur de userAdministrator est 0.
 //Si la valeur de userAdministrator est 1 l'utilisateur est connecté en tant qu'administrateur et la valeur de userConnected est 2.
@@ -44,7 +36,6 @@ if ($id = $_GET['idTeacher']) {
     $db->DeleteTeacherById($id);
     header('Location: index.php');
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -96,21 +87,21 @@ if ($id = $_GET['idTeacher']) {
                 <a href="index.php">Accueil</a>
                 <?php if ($_SESSION['userConnected'] == 2) {
                 ?>
-                    <a href="addTeacher.php"><?php echo gettext('Ajouter un enseignant'); ?></a>
+                    <a href="addTeacher.php">Ajouter un enseignant</a>
                 <?php } ?>
         </nav>
     <?php } ?>
     </header>
 
     <div class="container">
-        <h3><?php echo gettext('Liste des enseignants'); ?></h3>
+        <h3>Liste des enseignants</h3>
         <form action="#" method="post">
             <table>
                 <thead>
                     <tr>
-                        <th><?php echo gettext('Nom'); ?></th>
-                        <th><?php echo gettext('Surnom'); ?></th>
-                        <th><?php echo gettext('Options'); ?></th>
+                        <th>Nom</th>
+                        <th>Surnom</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -17,10 +17,7 @@ const ERRORVOID = "*Obligatoire";
 $sections = $db->getAllSections();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $imageData = RenameImages($_FILES, $teacher, $db);
-    $_POST["imgPath"] = $imageData["imgPath"];
-
+    $imageData = RenameImages($_FILES, $db);
     $genreIsNotFilled = ($_POST["genre"] == null);
     $firstNameIsNotFilled = ($_POST["firstName"] == null);
     $nameIsNotFilled = ($_POST["name"] == null);
@@ -28,23 +25,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sectionIsNotFilled = ($_POST["section"] == null);
     $downloadImgIsNotFilled = ($imageData["downloadImg"] == null);
 
+    //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
+    if (
+        !$genreIsNotFilled and
+        !$firstNameIsNotFilled and
+        !$nameIsNotFilled and
+        !$nickNameIsNotFilled and
+        !$sectionIsNotFilled and
+        !$downloadImgIsNotFilled and
+        ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png")
+    ) {
+        move_uploaded_file($imageData['fileTmpNameImg'], $imageData['uploadPathImg']);
 
-}
-
-
-//Si le formulaire a été envoyé alors un nouvel enseignant est crée 
-if ($_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled
-    and !$nickNameIsNotFilled and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png")
-) {
-    move_uploaded_file($imageData['fileTmpNameImg'], $imageData['uploadPathImg']);
-    $teachers = $db->InsertTeacher($teacher);
-    $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
-} else {
-    if ($_POST) {
-        $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
+        // On ne changera pas la valeur de $_POST en sachant que ce sont des variables read-only.
+        // Ce qui veut dire qu'on ne nommera pas une varaible comme ceci -> $_POST['imPath'] = xyz !!!!!!
+        // On rajoutera les variables hors formulaire en tant que params.
+        $teachers = $db->InsertTeacher($_POST, $imageData);
+        $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
+    } else {
+        if ($_POST) {
+            $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
+        }
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
