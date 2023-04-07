@@ -122,7 +122,7 @@ class Database
             'gender' => $teacher['genre'],
             'nick_name' => $teacher['nickName'],
             'origin' => $teacher['origin'],
-            'teaPhoto' => $imgData['fileNameImg'],
+            'teaPhoto' => $imgData['uploadDirectoryImg'] . $imgData['fileNameImg'],
             'fk_section' => $teacher['section'],
         ];
 

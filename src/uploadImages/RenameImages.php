@@ -34,17 +34,5 @@ function RenameImages($dataFiles, $db)
         $imageData["uploadPathImg"] = $imageData["currentDirectory"] . $imageData["uploadDirectoryImg"] . $imageData["fileNameImg"];
     }
 
-    // // Supprimer le fichier existant s'il y en a un
-    // $imageData["filePath"] = "." . $imageData["imgPath"];
-    // if (file_exists($imageData["filePath"])) {
-    //     if (unlink($imageData["filePath"])) {
-    //         echo 'File deleted successfully.';
-    //     } else {
-    //         echo 'Unable to delete file.';
-    //     }
-    // } else {
-    //     echo 'File does not exist.';
-    // }
-
     return $imageData;
 }
