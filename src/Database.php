@@ -107,22 +107,23 @@ class Database
     /**
      * Fonction permettant de créer un nouvel enseignant
      * @param $teacher array | contient tous les attributs d'un enseignant a creer
+     * @param $imgData array | contient touts les attributs de l'image a uploader
      */
-    public function InsertTeacher($teacher)
+    public function InsertTeacher($teacher, $imgData)
     {
         $query = "
-             INSERT INTO t_teacher (teaFirstname, teaName, teaGender, teaNickname, teaOrigine, teaPhoto, fkSection) 
-             VALUES (:first_name, :last_name, :gender, :nick_name, :origin, :teaPhoto, :fk_section);
-         ";
+            INSERT INTO t_teacher (teaFirstname, teaName, teaGender, teaNickname, teaOrigine, teaPhoto, fkSection) 
+            VALUES (:first_name, :last_name, :gender, :nick_name, :origin, :teaPhoto, :fk_section);
+        ";
 
         $replacements = [
-            'first_name' => $teacher[0],
-            'last_name' => $teacher[1],
-            'gender' => $teacher[2],
-            'nick_name' => $teacher[3],
-            'origin' => $teacher[4],
-            'teaPhoto' => $teacher[5],
-            'fk_section' => $teacher[6],
+            'first_name' => $teacher['firstName'],
+            'last_name' => $teacher['name'],
+            'gender' => $teacher['genre'],
+            'nick_name' => $teacher['nickName'],
+            'origin' => $teacher['origin'],
+            'teaPhoto' => $imgData['fileNameImg'],
+            'fk_section' => $teacher['section'],
         ];
 
         $response = $this->queryPrepareExecute($query, $replacements);
@@ -135,33 +136,23 @@ class Database
      */
     public function UpdateTeacherById($id, $teacher)
     {
-
         $query = "
             UPDATE
                 t_teacher
             SET
-                teaFirstname = :first_name,
-                teaName = :last_name,
-                teaGender = :gender,
-                teaNickname = :nick_name,
+                teaFirstname = :firstName,
+                teaName = :name,
+                teaGender = :genre,
+                teaNickname = :nickName,
                 teaOrigine = :origin,
-                teaPhoto = :teaPhoto,
-                fkSection = :fk_section
+                teaPhoto = :imgPath,
+                fkSection = :section
             WHERE
                 idTeacher = :id
         ;";
 
-        $replacements = [
-            'id' => $id,
-            'first_name' => $teacher[0],
-            'last_name' => $teacher[1],
-            'gender' => $teacher[2],
-            'nick_name' => $teacher[3],
-            'origin' => $teacher[4],
-            'teaPhoto' => $teacher[5],
-            'fk_section' => $teacher[6],
-        ];
-        $this->queryPrepareExecute($query, $replacements);
+        $teacher["id"] = $id;
+        $this->queryPrepareExecute($query, $teacher);
     }
 
 

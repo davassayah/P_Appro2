@@ -8,75 +8,46 @@
  */
 
 session_start();
-
+include("uploadImages/RenameImages.php");
 include("Database.php");
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    //Gestion du transfert de l'image
-    //prends le dossier actuel
-    $currentDirectory = getcwd();
-    //dossier vers lequel le fichier va être transféré
-    $uploadDirectoryImg = "\img\photos";
-    //Récupère le fichier
-    $downloadImg = $_FILES["downloadImg"];
-    //Récupère le nom du fichier
-    $fileNameImg = $_FILES['downloadImg']['name'];
-    //Récupère le nom temporaire du fichier
-    $fileTmpNameImg = $_FILES['downloadImg']['tmp_name'];
-    //Reprends l'extension du fichier transféré
-    $fileExtensionImg = strtolower(end(explode('.', $fileNameImg)));
-    //Definis l'extension du fichier apres l'avoir recuperee
-    $extensionImg = pathinfo($fileNameImg, PATHINFO_EXTENSION);
-    //Permet de donner un nom unique au fichier enregistre cote serveur
-    $nameId = $db->RenameFile();
-    $ImgNewName = "\Img_" . $nameId + 1 . "." . $extensionImg;
-    //Permet de supprimer le nom donne au fichier par l'utilisateur et de le remplacer par le nom desire
-    if (isset($_FILES['downloadImg'])) {
-        $fileNameImg = str_replace($fileNameImg, $ImgNewName, $fileNameImg);
-    }
-    //Définis le chemin final avec le nom du fichier où va être transférer le fichier en lui donnant un nom unique
-    $uploadPathImg = $currentDirectory . $uploadDirectoryImg . "/" . basename($fileNameImg);
-    //permet de donner un nom final au fichier
-    $imgPath = $uploadDirectoryImg . $fileNameImg;
-
-    $genre = $_POST["genre"] ?? '';
-    $firstName = $_POST["firstName"] ?? '';
-    $name = $_POST["name"] ?? '';
-    $nickName = $_POST["nickName"] ?? '';
-    $origin = $_POST["origin"] ?? '';
-    $section = $_POST["section"] ?? '';
-    //bien regarder l'ordre par rapport à la base de données
-    $teacher = [ $firstName, $name,$genre, $nickName, $origin, $imgPath, $section];
-
-    $genreIsNotFilled = ($genre == null);
-    $firstNameIsNotFilled = ($firstName == null);
-    $nameIsNotFilled = ($name == null);
-    $nickNameIsNotFilled = ($nickName == null);
-    $sectionIsNotFilled = ($section == null);
-    $downloadImgIsNotFilled = ($downloadImg == null);
-
-}
-
 $sections = $db->getAllSections();
 
-//Si le formulaire a été envoyé alors un nouvel enseignant est crée 
-if (
-    $_SERVER["REQUEST_METHOD"] === "POST" and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled
-    and !$nickNameIsNotFilled and !$sectionIsNotFilled and !$downloadImgIsNotFilled and ($extensionImg == "jpg" or $extensionImg == "png")
-) {
-    move_uploaded_file($fileTmpNameImg, $uploadPathImg);
-    $teachers = $db->InsertTeacher($teacher);
-    $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
-} else {
-    if ($_POST) {
-        $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $imageData = RenameImages($_FILES, $db);
+    $genreIsNotFilled = ($_POST["genre"] == null);
+    $firstNameIsNotFilled = ($_POST["firstName"] == null);
+    $nameIsNotFilled = ($_POST["name"] == null);
+    $nickNameIsNotFilled = ($_POST["nickName"] == null);
+    $sectionIsNotFilled = ($_POST["section"] == null);
+    $downloadImgIsNotFilled = ($imageData["downloadImg"] == null);
+
+    //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
+    if (
+        !$genreIsNotFilled and
+        !$firstNameIsNotFilled and
+        !$nameIsNotFilled and
+        !$nickNameIsNotFilled and
+        !$sectionIsNotFilled and
+        !$downloadImgIsNotFilled and
+        ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png")
+    ) {
+        move_uploaded_file($imageData['fileTmpNameImg'], $imageData['uploadPathImg']);
+
+        // On ne changera pas la valeur de $_POST en sachant que ce sont des variables read-only.
+        // Ce qui veut dire qu'on ne nommera pas une varaible comme ceci -> $_POST['imPath'] = xyz !!!!!!
+        // On rajoutera les variables hors formulaire en tant que params.
+        $teachers = $db->InsertTeacher($_POST, $imageData);
+        $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
+    } else {
+        if ($_POST) {
+            $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
+        }
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -186,9 +157,9 @@ if (
                 <p style="color:red;">
                     <?php if ($_POST and $downloadImgIsNotFilled) {
                         echo ERRORVOID;
-                    } else if ($_POST and ($extensionImg != "jpg" and $extensionImg != "png")) {
+                    } else if ($_POST and ($imageData['extensionImg'] != "jpg" and $imageData['extensionImg'] != "png")) {
                         echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                    } else if ($extensionImg == "jpg" or $extensionImg == "png") {
+                    } else if ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png") {
                         echo "Votre fichier a bien été téléchargé";
                     }
                     ?>

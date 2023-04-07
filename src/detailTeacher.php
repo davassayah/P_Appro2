@@ -60,7 +60,7 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
 
     <div class="container">
         <div class="user-head">
-            <h3><?php echo gettext("Detail :"); ?><?php
+            <h3>Detail :<?php
                             echo $OneTeacher["teaName"] . " " . $OneTeacher["teaFirstname"] ?>
                 <?php
                 //Affiche une image différente en fonction du genre de l'enseignant (se base sur la valeur de teaGender)
@@ -90,12 +90,11 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
         </div>
         <div class="user-body">
             <div class="left">
-                <p>Surnom :
-                    <?php echo $OneTeacher["teaNickname"]  ?></p>
-                <p> <?php echo $OneTeacher["teaOrigine"]  ?></p>
+                <p>Surnom :<?php echo $OneTeacher["teaNickname"] ?></p>
+                <p> <?php echo $OneTeacher["teaOrigine"] ?></p>
             </div>
             <div>
-            <img src=<?php echo $OneTeacher["teaPhoto"]?>>
+            <img src="<?php echo $OneTeacher["teaPhoto"] ?>">
             </div>
         </div>
         <div class="user-footer">
