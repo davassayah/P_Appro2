@@ -61,7 +61,13 @@ class Database
     //Fonction permettant de récupérer la liste de tous les enseignants de la BD
     public function getAllTeachers()
     {
-        $query = "SELECT * FROM t_teacher";
+        $query = "
+            SELECT
+                tt.*,
+                ts.secName AS teaSectionName
+            FROM t_teacher tt
+            LEFT JOIN t_section ts ON ts.idSection = tt.fkSection
+        ";
         //appeler la méthode pour executer la requête
         $req = $this->querySimpleExecute($query);
         //appeler la méthode pour avoir le résultat sous forme de tableau
@@ -200,19 +206,34 @@ class Database
         return $this->formatData($req)[0];
     }
 
-    public function sortTeachers($searchValue)
+    public function sortTeachers($filters)
     {
+
         $query = "
-        SELECT * 
-        FROM t_teacher
-        WHERE teaName 
-        LIKE :searchValue 
-        ORDER BY teaName 
-        ASC";
-    
+            SELECT
+                tt.*,
+                ts.secName AS teaSectionName 
+            FROM t_teacher tt
+            LEFT JOIN t_section ts ON ts.idSection = tt.fkSection
+            WHERE tt.teaName LIKE :searchValue 
+            " . (isset($filters['genders']) ? "AND tt.teaGender IN (:genders)" : '') . "
+            " . ((isset($filters['section_id']) and $filters['section_id'] !== '') ? "AND tt.fkSection = :section_id" : '') . "
+            ORDER BY tt.teaName ASC
+        ";
+
         $replacements = [
-            'searchValue' => '%' . $searchValue . '%',
+            'searchValue' => '%' . $filters['search'] . '%',
         ];
+    
+        if (isset($filters['genders'])) {
+            // array = ['M', 'F'] 
+            // string = 'M', 'F'
+            $replacements['genders'] = implode(',', $filters['genders']);
+        }
+    
+        if (isset($filters['section_id']) and $filters['section_id'] !== '') {
+            $replacements['section_id'] = $filters['section_id'];
+        }
     
         $req = $this->queryPrepareExecute($query, $replacements);
         $filtres = $this->formatData($req);
