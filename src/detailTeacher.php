@@ -8,6 +8,11 @@
  */
 
 session_start();
+
+if (!isset($_SESSION['userConnected'])) {
+    header('Location: index.php');
+}
+
 include("Database.php");
 $db = new Database();
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url

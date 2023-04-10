@@ -23,12 +23,7 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         echo "erreur de connexion";
     } else if ($user != null) {
         // echo "vous êtes connecté";
-        if ($user['useAdministrator'] == 0) {
-            $_SESSION['userConnected'] = 1;
-        }
-        if ($user['useAdministrator'] == 1) {
-            $_SESSION['userConnected'] = 2;
-        }
+        $_SESSION['userConnected'] = $user['useAdministrator'];
     }
 }
 
@@ -70,11 +65,11 @@ if (isset($_POST['submit'])) {
             <a class="navbar-brand">Surnom des enseignants</a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav">
-                <?php if ($_SESSION['userConnected'] >= 1) { ?>
+                <?php if ($_SESSION['userConnected'] >= 0) { ?>
                     <li class="nav-item">
                         <a  class="nav-link" href="index.php">Accueil</a>
                     </li>
-                    <?php if ($_SESSION['userConnected'] == 2) { ?>
+                    <?php if ($_SESSION['userConnected'] == 1) { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="addTeacher.php">Ajouter un enseignant</a>
                         </li>
@@ -170,9 +165,8 @@ if (isset($_POST['submit'])) {
                             <td><?php echo $teacher["teaSectionName"] ?></td>
                             <td class="containerOptions">
                                 <!--Affiche différentes fonctionnalités selon que l'utilisateur soit connecté en tant qu'utilisateur ou en tant qu'admin-->
-                                <?php if ($_SESSION['userConnected'] >= 1) {
-                                ?>
-                                    <?php if ($_SESSION['userConnected'] == 2) {
+                                <?php if ($_SESSION['userConnected'] >= 0) { ?>
+                                    <?php if ($_SESSION['userConnected'] == 1) {
                                     ?>
                                         <a class="link-light" href="updateTeacher.php?idTeacher=<?php echo $teacher["idTeacher"]; ?>">
                                             <img height="20em" src="./img/edit.png" alt="edit">

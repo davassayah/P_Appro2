@@ -76,6 +76,29 @@ class Database
         return $teachers;
     }
 
+    public function getAllUsers() {
+        $query = "SELECT * FROM t_user";
+        $req = $this->querySimpleExecute($query);
+        $users = $this->formatData($req);
+
+        return $users;
+    }
+
+    public function createUser($user) {
+        $query = "
+            INSERT INTO t_user (useLogin, usePassword, useAdministrator)
+            VALUES (:username, :password, :is_admin)
+        ";
+
+        $replacements = [
+            'username' => $user['username'],
+            'password' => password_hash($user['password'], PASSWORD_BCRYPT),
+            'is_admin' => $user['is_admin']
+        ];
+
+        $this->queryPrepareExecute($query, $replacements);
+    }
+
     public function getAllSections()
     {
         $query = "SELECT * FROM t_section";
@@ -185,25 +208,23 @@ class Database
      * @param $user string | nom d'utilisateur de l'enseignant 
      * @param $password string | mot de passe de l'enseignant
      */
-    public function CheckAuth($user, $password)
+    public function CheckAuth($username, $password)
     {
-
         $query = "
             SELECT * 
             FROM t_user 
-            WHERE useLogin = :user
-            AND usePassword = :password
+            WHERE useLogin = :username
         ";
 
-        $replacements = [
-            'user' => $user,
-            'password' => $password,
-        ];
-
+        $replacements = ['username' => $username];
         $req = $this->queryPrepareExecute($query, $replacements);
+        $user = $this->formatData($req)[0];
 
-        //Retourne les données de l'utilisateur
-        return $this->formatData($req)[0];
+        if (password_verify($password, $user['usePassword'])) {
+            return $user;
+        } else {
+            echo 'non';
+        }
     }
 
     public function sortTeachers($filters)
