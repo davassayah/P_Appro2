@@ -8,6 +8,11 @@
  */
 
 session_start();
+
+if ($_SESSION['userConnected'] < 1) {
+    header('Location: index.php');
+}
+
 include("uploadImages/RenameImages.php");
 include("Database.php");
 $db = new Database();
