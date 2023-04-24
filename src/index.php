@@ -12,6 +12,8 @@ session_start();
 include("Database.php");
 $db = new Database();
 
+include("header.php");
+
 $sections = $db->getAllSections();
 
 //Vérifie les identifiants de l'utilisateur grâce à la méthode CheckAuth. Si les informations n'existent ou ne correspondent pas, la valeur est nulle et une erreur s'affiche.
@@ -48,44 +50,16 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link href="./css/style.css" rel="stylesheet"> -->
+    <link href="./css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <script
-        src="https://code.jquery.com/jquery-3.6.4.js"
-        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
     <title>Version statique de l'application des surnoms</title>
 </head>
 
 <body>
-    <nav class="navbar bg-dark navbar-expand-lg" data-bs-theme="dark">
-        <div class="container">
-            <a class="navbar-brand">Surnom des enseignants</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav">
-                <?php if ($_SESSION['userConnected'] >= 0) { ?>
-                    <li class="nav-item">
-                        <a  class="nav-link" href="index.php">Accueil</a>
-                    </li>
-                    <?php if ($_SESSION['userConnected'] == 1) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="addTeacher.php">Ajouter un enseignant</a>
-                        </li>
-                    <?php } ?>
-                <?php } ?>
-                </ul>
-            </div>
-            <form class="d-flex" action="" method="post">
-                <input class="form-control me-2" type="text" name="user" id="user" placeholder="Login">
-                <input class="form-control me-2" type="password" name="password" id="password" placeholder="Mot de passe">
-                <button class="btn btn-outline-success" type="submit">Connexion</button>
-            </form>
-        </div>
-    </nav>
     <div class="container">
-        
         <fieldset class="mb-3 mt-5">
             <h5>Filtres</h5>
             <form method="POST" action="" class="row g-3">
@@ -110,7 +84,7 @@ if (isset($_POST['submit'])) {
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="a" value="A" name="genders[]">
                         <label class="form-check-label" for="a">
-                            Autre (mais ussi les croissant)
+                            Autre
                         </label>
                     </div>
                 </div>
@@ -119,7 +93,7 @@ if (isset($_POST['submit'])) {
                     <label for="inputEmail4" class="form-label">Section</label>
                     <select name="section_id" class="form-select" aria-label="Default select example">
                         <option value="">
-                        Select...
+                            Select...
                         </option>
                         <?php foreach ($sections as $section) { ?>
                             <option value="<?php echo $section["idSection"] ?>">
@@ -128,7 +102,7 @@ if (isset($_POST['submit'])) {
                         <?php } ?>
                     </select>
                 </div>
-                
+
                 <input type="submit" name="submit" value="Rechercher" class="btn btn-success btn-sm">
             </form>
         </fieldset>
@@ -192,14 +166,14 @@ if (isset($_POST['submit'])) {
     </div>
 
     <script>
-       $(document).ready( function () {
+        $(document).ready(function() {
             $('#table-avec-sort').DataTable({
                 searching: false,
                 language: {
                     lengthMenu: "Montrer _MENU_ entrees"
                 }
             });
-        } );
+        });
     </script>
 
 </body>

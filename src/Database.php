@@ -76,7 +76,8 @@ class Database
         return $teachers;
     }
 
-    public function getAllUsers() {
+    public function getAllUsers()
+    {
         $query = "SELECT * FROM t_user";
         $req = $this->querySimpleExecute($query);
         $users = $this->formatData($req);
@@ -84,7 +85,8 @@ class Database
         return $users;
     }
 
-    public function createUser($user) {
+    public function createUser($user)
+    {
         $query = "
             INSERT INTO t_user (useLogin, usePassword, useAdministrator)
             VALUES (:username, :password, :is_admin)
@@ -245,20 +247,18 @@ class Database
         $replacements = [
             'searchValue' => '%' . $filters['search'] . '%',
         ];
-    
+
         if (isset($filters['genders'])) {
-            // array = ['M', 'F'] 
-            // string = 'M', 'F'
             $replacements['genders'] = implode(',', $filters['genders']);
         }
-    
+
         if (isset($filters['section_id']) and $filters['section_id'] !== '') {
             $replacements['section_id'] = $filters['section_id'];
         }
-    
+
         $req = $this->queryPrepareExecute($query, $replacements);
         $filtres = $this->formatData($req);
-    
+
         return $filtres;
     }
 }

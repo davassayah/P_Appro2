@@ -14,9 +14,12 @@ if (!isset($_SESSION['userConnected'])) {
 }
 
 include("Database.php");
+include("header.php");
+
 $db = new Database();
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url
 $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
+
 ?>
 
 <!DOCTYPE html>
@@ -27,85 +30,58 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
     <title>Version statique de l'application des surnoms</title>
 </head>
 
 <body>
-
-    <header>
-        <div class="container-header">
-            <div class="titre-header">
-                <h1>Surnom des enseignants</h1>
-            </div>
-            <div class="login-container">
-                <form action="#" method="post">
-                    <label for="user"> </label>
-                    <input type="text" name="user" id="user" placeholder="Login">
-                    <label for="password"> </label>
-                    <input type="password" name="password" id="password" placeholder="Mot de passe">
-                    <button type="submit" class="btn btn-login">Se connecter</button>
-                </form>
-            </div>
-        </div>
-        <!--Si l'utilisateur est connecté en tant qu'utilisateur (valeur 1) il n'a pas la possibilité d'ajouter un enseignant tandis que s'il est
-        est connecté en tant qu'administrateur (valeur 2) il a la possibilité d'ajouter un enseignant-->
-        <nav>
-            <h2>Zone pour le menu</h2>
-            <?php if ($_SESSION['userConnected'] >= 1) {
-            ?>
-                <a href="index.php">Accueil</a>
-                <?php if ($_SESSION['userConnected'] == 2) {
-                ?>
-                    <a href="addTeacher.php">Ajouter un enseignant</a>
-                <?php } ?>
-
-        </nav>
-    <?php } ?>
-    </header>
-
-    <div class="container">
-        <div class="user-head">
-            <h3>Detail :<?php
-                            echo $OneTeacher["teaName"] . " " . $OneTeacher["teaFirstname"] ?>
+    <fieldset class="mb-3 mt-5">
+        <div class="container">
+            <div class="user-body">
+                <h3>Informations de l'enseignant : </h3> <?php
+                                                            echo "Nom de famille : " . $OneTeacher["teaName"] . "<br>" . "Prénom : " . $OneTeacher["teaFirstname"] . "<br>" ?>
                 <?php
                 //Affiche une image différente en fonction du genre de l'enseignant (se base sur la valeur de teaGender)
                 if ($OneTeacher["teaGender"] == "M") {
-                    echo '<img style="margin-left: 1vw;" height="20em" src="./img/male.png" alt="male symbole">';
+                    echo "Genre :" . '<img style="margin-left: 1vw;" height="20em" src="./img/male.png" alt="male symbole">';
                 } else if ($OneTeacher["teaGender"] == "F") {
-                    echo '<img style="margin-left: 1vw;" height="20em" src="./img/femelle.png" alt="male symbole">';
+                    echo  "Genre :" . '<img style="margin-left: 1vw;" height="20em" src="./img/femelle.png" alt="male symbole">';
                 } else if ($OneTeacher["teaGender"] == "A") {
-                    echo '<img style="margin-left: 1vw;" height="20em" src="./img/autre.png" alt="male symbole">';
+                    echo "Genre :" . '<img style="margin-left: 1vw;" height="20em" src="./img/autre.png" alt="male symbole">';
                 }
                 ?>
-
-            </h3>
-            <p>
-                <?php echo $OneTeacher["secName"] ?>
-            </p>
-            <div class="actions">
-
-                <!--Si l'utilisateur est connecté en tant qu'admin (valeur 2) alors il a accès à la modification et à la supression sinon pas-->
-                <?php if ($_SESSION['userConnected'] == 2) { ?>
-                    <a href="#">
-                        <img height="20em" src="./img/edit.png" alt="edit icon"></a>
-                    <a href="javascript:confirmDelete()">
-                        <img height="20em" src="./img/delete.png" alt="delete icon"> </a>
-                <?php } ?>
+                <p>
+                    <?php echo "Section : " . $OneTeacher["secName"] ?>
+                </p>
+                <div class="user-body">
+                    <div class="left">
+                        <p><?php echo "Surnom : " . $OneTeacher["teaNickname"] ?></p>
+                        <p> <?php echo "Origine du surnom : " . $OneTeacher["teaOrigine"] ?></p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <!--Si l'utilisateur est connecté en tant qu'admin (valeur 2) alors il a accès à la modification et à la supression sinon pas-->
+                    <?php if ($_SESSION['userConnected'] == 1) {
+                        echo " Actions : " ?>
+                        <a href="updateTeacher.php">
+                            <img height="20em" src="./img/edit.png" alt="edit icon"></a>
+                        <a href="javascript:confirmDelete()">
+                            <img height="20em" src="./img/delete.png" alt="delete icon"> </a>
+                    <?php } ?>
+                    <div>
+                        <img src="<?php echo $OneTeacher["teaPhoto"] ?>">
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="user-body">
-            <div class="left">
-                <p>Surnom :<?php echo $OneTeacher["teaNickname"] ?></p>
-                <p> <?php echo $OneTeacher["teaOrigine"] ?></p>
+            <div class="user-footer">
+                <a href="index.html">
+                    <p>Retour a la page d'accueil
+                </a>
             </div>
-            <div>
-            <img src="<?php echo $OneTeacher["teaPhoto"] ?>">
-            </div>
-        </div>
-        <div class="user-footer">
-            <a href="index.html"><p>Retour a la page d'accueil</a>
-        </div>
-
+    </fieldset>
     </div>
 
     <footer>

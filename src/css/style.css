@@ -1,14 +1,14 @@
-body {
+/* body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: auto;
-    width: 80%;
-}
+    width: 100%;
+} */
 
-nav {
+/* nav {
     border: black solid 3px;
     background-color: #e5e5e5;
     text-align: center;
-}
+} */
 
 .container {
     height: 50%;
@@ -65,7 +65,7 @@ label {
     width: 10%;
 }
 
-.container-header {
+/* .container-header {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,7 +126,7 @@ label {
     width: 100%;
     border: none;
     cursor: pointer;
-    height: 4.5em;
+    height: 2,5em;
     border-radius: 8px;
 }
 
@@ -156,4 +156,4 @@ label {
     background-color: #eee;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
+  } */
