@@ -15,6 +15,7 @@ if ($_SESSION['userConnected'] < 1) {
 
 include("Database.php");
 include("header.php");
+include("footer.php");
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";

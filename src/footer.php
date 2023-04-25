@@ -19,7 +19,7 @@ session_start();
                     </li>
                     <li class="nav-item">
                         <a class="link-light" href="https://www.instagram.com" target="_blank">
-                            <img height="40em" src="./img/instagram.png" alt="edit">
+                            <img height="35em" margin-top: 100px src="./img/instagram.png" alt="edit">
                         </a>
                     </li>
                 </ul>

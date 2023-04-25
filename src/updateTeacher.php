@@ -11,6 +11,7 @@ session_start();
 include("uploadImages/UpdateImages.php");
 include("Database.php");
 include("header.php");
+include("footer.php");
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";
@@ -20,7 +21,6 @@ $teacher = $db->getOneTeacher($_GET["idTeacher"]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    // 
     $imageData = UpdateImages($_FILES, $teacher);
     $_POST["imgPath"] = $imageData["imgPath"];
 
@@ -49,7 +49,6 @@ if (
     header('Location: index.php');
 }
 
-
 $sections = $db->getAllSections();
 
 ?>
@@ -70,9 +69,8 @@ $sections = $db->getAllSections();
 </head>
 
 <body>
-    <header>
         <div class="container">
-            <fieldset class="mb-3 mt-5">
+            <fieldset class="mb-5 mt-4">
                 <div class="user-body">
                     <form action="#" method="post" id="form" enctype="multipart/form-data">
                         <h3>Modifier un enseignant</h3>
@@ -165,14 +163,7 @@ $sections = $db->getAllSections();
                         </p>
                     </form>
                 </div>
-                <div class="user-footer">
-                    <a href="index.php">Retour à la page d'accueil</a>
-                </div>
         </div>
-        <footer>
-            <p>Copyright GCR - bulle web-db - 2022</p>
-        </footer>
-
 </body>
 
 </html>

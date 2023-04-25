@@ -13,6 +13,7 @@ include("Database.php");
 $db = new Database();
 
 include("header.php");
+include("footer.php");
 
 
 $sections = $db->getAllSections();
@@ -43,6 +44,8 @@ if (isset($_POST['submit'])) {
     $teachers = $db->sortTeachers($_POST);
 }
 
+var_dump($_SESSION['userConnected']);
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -61,7 +64,7 @@ if (isset($_POST['submit'])) {
 
 <body>
     <div class="container">
-        <fieldset class="mb-3 mt-5">
+        <fieldset class="mb- mt-5">
             <h5>Filtres</h5>
             <form method="POST" action="" class="row g-3">
                 <div class="col-2">
@@ -144,7 +147,7 @@ if (isset($_POST['submit'])) {
                             <td><?php echo $teacher["teaSectionName"] ?></td>
                             <td class="containerOptions">
                                 <!--Affiche différentes fonctionnalités selon que l'utilisateur soit connecté en tant qu'utilisateur ou en tant qu'admin-->
-                                <?php if ($_SESSION['userConnected'] >= 0) { ?>
+                                <?php if ($_SESSION['userConnected'] >= 1) { ?>
                                     <?php if ($_SESSION['userConnected'] == 1) {
                                     ?>
                                         <a class="link-light" href="updateTeacher.php?idTeacher=<?php echo $teacher["idTeacher"]; ?>">
@@ -181,5 +184,3 @@ if (isset($_POST['submit'])) {
 </body>
 
 </html>
-
-<?php include("footer.php"); ?>

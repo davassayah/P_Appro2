@@ -16,6 +16,7 @@ if ($_SESSION['userConnected'] < 1) {
 include("uploadImages/RenameImages.php");
 include("Database.php");
 include("header.php");
+include("footer.php");
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";
@@ -160,15 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
     </fieldset>
     </div>
-    <div class="user-footer">
-        <a href="index.php">Retour a la page d'accueil</a>
     </div>
-    </div>
-
-    <footer>
-        <p>Copyright GCR - bulle web-db - 2022</p>
-    </footer>
-
 </body>
 
 </html>

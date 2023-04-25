@@ -15,6 +15,7 @@ if (!isset($_SESSION['userConnected'])) {
 
 include("Database.php");
 include("header.php");
+include("footer.php");
 
 $db = new Database();
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url
@@ -42,7 +43,7 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
         <div class="container">
             <div class="user-body">
                 <h3>Informations de l'enseignant : </h3> <?php
-                                                            echo "Nom de famille : " . $OneTeacher["teaName"] . "<br>" . "Prénom : " . $OneTeacher["teaFirstname"] . "<br>" ?>
+                echo "Nom de famille : " . $OneTeacher["teaName"] . "<br>" . "Prénom : " . $OneTeacher["teaFirstname"] . "<br>" ?>
                 <?php
                 //Affiche une image différente en fonction du genre de l'enseignant (se base sur la valeur de teaGender)
                 if ($OneTeacher["teaGender"] == "M") {
@@ -76,18 +77,8 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
                     </div>
                 </div>
             </div>
-            <div class="user-footer">
-                <a href="index.html">
-                    <p>Retour a la page d'accueil
-                </a>
-            </div>
     </fieldset>
     </div>
-
-    <footer>
-        <p>Copyright GCR - bulle web-db - 2022</p>
-    </footer>
-
     <script src="js/script.js"></script>
 
 </body>

@@ -1,8 +1,10 @@
 /* body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: auto;
-    width: 100%;
-} */
+    /* margin: auto; */
+    /* width: 100%; */
+    /* position: relative;
+  min-height: 100vh; spécifie la hauteur minimale du corps pour qu'il remplisse tout l'écran */
+/* } */ 
 
 /* nav {
     border: black solid 3px;
@@ -10,9 +12,9 @@
     text-align: center;
 } */
 
-.container {
+/* .container {
     height: 50%;
-}
+} */
 
 footer {
     position: fixed !important;
@@ -67,97 +69,5 @@ td {
 label {
     display: inline-block;
     width: 10%;
-}
+};
 
-/* .container-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 5%;
-
-}
-
-.titre-header {
-    width: 60%;
-    height: 100%;
-}
-
-.login-container {
-    width: 40%;
-    height: 100%;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-}
-
-.login-container form {
-    display: flex;
-    justify-content: space-between;
-}
-
-.login-container label {
-    display: none;
-}
-
-.login-container input,
-.login-container .btn-login {
-    width: 30%;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-}
-
-.login-container h3 {
-    display: inline-block;
-    width: 30%;
-    text-align: right;
-    margin-right: 1vw;
-}
-
-.login-container input {
-    height: 4em;
-    margin-bottom: auto;
-    margin-top: auto;
-}
-
-.btn-login {
-    background-color: #00b4cc;
-}
-
-.btn {
-    text-align: center;
-    color: white;
-    width: 100%;
-    border: none;
-    cursor: pointer;
-    height: 2,5em;
-    border-radius: 8px;
-}
-
-.btn:hover {
-    opacity: 0.8;
-}
-
-.btn-logout {
-    text-decoration: none;
-    background-color: coral;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 30%;
-}
-
-.sort-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  } */
