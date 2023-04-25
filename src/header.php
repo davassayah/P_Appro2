@@ -1,3 +1,8 @@
+<?php
+session_start();
+
+?>
+
 <header>
     <nav class="navbar bg-dark navbar-expand-lg" data-bs-theme="dark">
         <div class="container">

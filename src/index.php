@@ -14,6 +14,7 @@ $db = new Database();
 
 include("header.php");
 
+
 $sections = $db->getAllSections();
 
 //Vérifie les identifiants de l'utilisateur grâce à la méthode CheckAuth. Si les informations n'existent ou ne correspondent pas, la valeur est nulle et une erreur s'affiche.
@@ -117,6 +118,9 @@ if (isset($_POST['submit'])) {
                             Nom
                         </th>
                         <th class="th-sm">
+                            Prénom
+                        </th>
+                        <th class="th-sm">
                             Surnom
                         </th>
                         <th class="th-sm">
@@ -133,7 +137,8 @@ if (isset($_POST['submit'])) {
                 <tbody>
                     <?php foreach ($teachers as $teacher) { ?>
                         <tr>
-                            <td><?php echo $teacher["teaName"] . " " . $teacher["teaFirstname"] ?></td>
+                            <td><?php echo $teacher["teaName"] ?></td>
+                            <td><?php echo $teacher["teaFirstname"] ?></td>
                             <td><?php echo $teacher["teaNickname"] ?></td>
                             <td><?php echo $teacher["teaGender"] ?></td>
                             <td><?php echo $teacher["teaSectionName"] ?></td>
@@ -159,9 +164,6 @@ if (isset($_POST['submit'])) {
                 </tbody>
             </table>
         </form>
-        <footer>
-            <p>Copyright GCR - bulle web-db - 2022</p>
-        </footer>
         <script src="js/script.js"></script>
     </div>
 
@@ -179,3 +181,5 @@ if (isset($_POST['submit'])) {
 </body>
 
 </html>
+
+<?php include("footer.php"); ?>

@@ -72,7 +72,7 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
                             <img height="20em" src="./img/delete.png" alt="delete icon"> </a>
                     <?php } ?>
                     <div>
-                        <img src="<?php echo $OneTeacher["teaPhoto"] ?>">
+                        <img height="300em" src="<?php echo $OneTeacher["teaPhoto"] ?>">
                     </div>
                 </div>
             </div>
