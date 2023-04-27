@@ -1,7 +1,27 @@
 <?php
 session_start();
 
-$users = $db->getAllUsers();
+// Déconnexion de l'utilisateur
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: index.php');
+}
+
+//Vérifie les identifiants de l'utilisateur grâce à la méthode CheckAuth. Si les informations n'existent ou ne correspondent pas, la valeur est nulle et une erreur s'affiche.
+//Si la valeur de $user n'est pas null (les identifiants sont valides) l'utilisateur est connecté en tant qu'utilisateur si la valeur de userAdministrator est 0.
+//Si la valeur de userAdministrator est 1 l'utilisateur est connecté en tant qu'administrateur et la valeur de userConnected est 2.
+if (isset($_POST['user']) && isset($_POST['password'])) {
+    $user = $db->CheckAuth($_POST['user'], $_POST['password']);
+    if ($user == null) {
+        echo "erreur de connexion";
+    } else if ($user != null) {
+        // echo "vous êtes connecté";
+        $_SESSION['userConnected'] = $user['useAdministrator'];
+        $_SESSION['userId'] = $user['idUser'];
+        $_SESSION['useLogin'] = $db->getOneUser($_SESSION['userId'])['useLogin'];
+    }
+}
 
 ?>
 
@@ -28,7 +48,10 @@ $users = $db->getAllUsers();
             </div>
             <?php
             if ($_SESSION['userConnected'] != null) {
-                echo "<span style='color:white;'> Bienvenue " . $users['useLogin'] . "</span>";
+                echo "<span style='color:white;'> Bienvenue " . $_SESSION['useLogin'] . "</span>";
+                echo "<form class='d-flex' action='' method='post'>";
+                echo "<button class='btn btn-outline-danger' type='submit' name='logout'>Déconnexion</button>";
+                echo "</form>";
             } else { // Sinon, affiche le formulaire
             ?>
                 <form class="d-flex" action="" method="post">
@@ -38,5 +61,4 @@ $users = $db->getAllUsers();
                 </form>
             <?php } ?>
         </div>
-    </nav>
-</header>
+            </nav>

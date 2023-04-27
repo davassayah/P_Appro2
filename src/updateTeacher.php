@@ -8,10 +8,17 @@
  */
 
 session_start();
+
+if ($_SESSION['userConnected'] != 1) {
+    header('HTTP/1.0 403 Forbidden', true, 403);
+    require_once(__DIR__ . "/../includes/403.php");
+    exit;
+}
+
 include("uploadImages/UpdateImages.php");
 include("Database.php");
 include("header.php");
-include("footer.php");
+
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";
@@ -167,3 +174,5 @@ $sections = $db->getAllSections();
 </body>
 
 </html>
+
+<?php include("footer.php"); ?>

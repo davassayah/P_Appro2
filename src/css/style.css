@@ -1,22 +1,18 @@
-/* body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    /* margin: auto; */
-    /* width: 100%; */
-    /* position: relative;
-  min-height: 100vh; spécifie la hauteur minimale du corps pour qu'il remplisse tout l'écran */
-/* } */ 
 
-/* nav {
-    border: black solid 3px;
-    background-color: #e5e5e5;
-    text-align: center;
-} */
+#filter-section,
+#filter-gender {
+    margin-top: 10px;
+}
 
-/* .container {
-    height: 50%;
-} */
+.section-filter-wrapper {
+    margin-top: 1rem;
+}
+  
+  .filter-container.d-none {
+    display: none !important;
+  }
 
-footer {
+  footer {
     position: fixed !important;
     left: 0 !important;
     bottom: 0 !important;
@@ -24,7 +20,7 @@ footer {
     background-color: #f1f1f1 !important;
     color: #333 !important;
     text-align: center !important;
-  }
+}
 
 table {
     width: 100%;
@@ -69,5 +65,8 @@ td {
 label {
     display: inline-block;
     width: 10%;
-};
+}
 
+.row{
+    min-height: 13%;
+}

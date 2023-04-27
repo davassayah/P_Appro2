@@ -27,4 +27,3 @@ session_start();
             <a class="navbar-brand">Made with ♥ by David Assayah </a>
         </div>
     </nav>
-</footer>

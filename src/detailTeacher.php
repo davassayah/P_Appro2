@@ -9,13 +9,14 @@
 
 session_start();
 
-if (!isset($_SESSION['userConnected'])) {
-    header('Location: index.php');
+if ($_SESSION['userConnected'] != 1 or 2) {
+    header('HTTP/1.0 403 Forbidden', true, 403);
+    require_once(__DIR__ . "/../includes/403.php");
+    exit;
 }
 
 include("Database.php");
 include("header.php");
-include("footer.php");
 
 $db = new Database();
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url
@@ -84,3 +85,5 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
 </body>
 
 </html>
+
+<?php include("footer.php");?>

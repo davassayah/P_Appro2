@@ -9,13 +9,14 @@
 
 session_start();
 
-if ($_SESSION['userConnected'] < 1) {
-    header('Location: index.php');
+if ($_SESSION['userConnected'] != 1) {
+    header('HTTP/1.0 403 Forbidden', true, 403);
+    require_once(__DIR__ . "/../includes/403.php");
+    exit;
 }
 
 include("Database.php");
 include("header.php");
-include("footer.php");
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";
@@ -74,17 +75,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$genreIsNotFilled and !$firstNameI
                     </p>
                     <p>
                         <label for="password">Mot de passe</label>
-                        <input type="text" name="password" id="password" value=<?php if (isset($password)) echo $password ?>>
+                        <input type="password" name="password" id="password" value=<?php if (isset($password)) echo $password ?>>
                     <p style="color:red;">
                         <?php if ($_POST and $passwordIsNotFilled) echo ERRORVOID; ?>
                     </p>
                     </p>
                     <p>
-                        <label for="is_admin">Is Admin</label>
+                        <label for="is_admin">Rôle</label>
                         <select name="is_admin" id="is_admin">
-                            <option value="">Select type</option>
-                            <option value="0">false</option>
-                            <option value="1">true</option>
+                            <option value=""></option>
+                            <option value="1">Administrateur</option>
+                            <option value="2">Utilisateur</option>
                         </select>
                     </p>
                     <p style="color:red;">
@@ -99,3 +100,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$genreIsNotFilled and !$firstNameI
 </body>
 
 </html>
+
+<?php include("footer.php");?>

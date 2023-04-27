@@ -126,6 +126,21 @@ class Database
         return $Oneteacher[0];
     }
 
+    
+    //Recupère la liste des informations pour 1 enseignant
+    public function getOneUser($id)
+    {
+        //avoir la requête sql pour 1 enseignant (utilisation de l'id)
+        $query = "SELECT * FROM t_user WHERE idUser = :id";
+        //appeler la méthode pour executer la requête
+        $bind = array('id' => $id);
+        $req = $this->queryPrepareExecute($query, $bind);
+        //appeler la méthode pour avoir le résultat sous forme de tableau
+        $OneUser = $this->formatData($req);
+        //retourne l'enseignant
+        return $OneUser[0];
+    }
+
     public function RenameFile()
     {
         $query = "

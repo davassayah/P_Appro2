@@ -9,14 +9,15 @@
 
 session_start();
 
-if ($_SESSION['userConnected'] < 1) {
-    header('Location: index.php');
+if ($_SESSION['userConnected'] != 1) {
+    header('HTTP/1.0 403 Forbidden', true, 403);
+    header('location:index.php');
+    exit;
 }
 
 include("uploadImages/RenameImages.php");
 include("Database.php");
 include("header.php");
-include("footer.php");
 $db = new Database();
 
 const ERRORVOID = "*Obligatoire";
@@ -165,3 +166,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 </html>
+
+<?php include("footer.php");?>
