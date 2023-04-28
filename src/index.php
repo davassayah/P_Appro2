@@ -8,8 +8,6 @@
  * selon que l'on soit utilisateur ou administrateur.
  */
 
-session_start();
-
 include("header.php");
 $sections = $db->getAllSections();
 

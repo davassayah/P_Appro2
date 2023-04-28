@@ -7,8 +7,6 @@
  * Description: Page permettant de modifier les informations d'un enseignant
  */
 
-session_start();
-
 if ($_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
