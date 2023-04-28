@@ -11,7 +11,6 @@
 session_start();
 
 include("header.php");
-
 $sections = $db->getAllSections();
 
 $teachers = $db->getAllTeachers();

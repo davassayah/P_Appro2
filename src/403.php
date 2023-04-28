@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <h1>HTTP403 - Forbidden</h1>
+    <h1>HTTP403 - Vous n'avez pas les droits pour accéder à cette page</h1>
 </body>
 
 </html>
