@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+require_once 'Database.php';
+$db = Database::getInstance();
+
 // Déconnexion de l'utilisateur
 if (isset($_POST['logout'])) {
     session_unset();
@@ -61,4 +64,4 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
                 </form>
             <?php } ?>
         </div>
-            </nav>
+    </nav>

@@ -11,13 +11,12 @@ session_start();
 
 if ($_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
-    require_once(__DIR__ . "/../includes/403.php");
+    require_once(__DIR__ . "/403.php");
     exit;
 }
 
 include("Database.php");
 include("header.php");
-$db = new Database();
 
 const ERRORVOID = "*Obligatoire";
 
@@ -101,4 +100,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$genreIsNotFilled and !$firstNameI
 
 </html>
 
-<?php include("footer.php");?>
+<?php include("footer.php"); ?>

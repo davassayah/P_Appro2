@@ -11,15 +11,13 @@ session_start();
 
 if ($_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
-    require_once(__DIR__ . "/../includes/403.php");
+    require_once(__DIR__ . "/403.php");
     exit;
 }
 
 include("uploadImages/UpdateImages.php");
 include("Database.php");
 include("header.php");
-
-$db = new Database();
 
 const ERRORVOID = "*Obligatoire";
 
@@ -76,101 +74,101 @@ $sections = $db->getAllSections();
 </head>
 
 <body>
-        <div class="container">
-            <fieldset class="mb-5 mt-4">
-                <div class="user-body">
-                    <form action="#" method="post" id="form" enctype="multipart/form-data">
-                        <h3>Modifier un enseignant</h3>
-                        <p>
-                            <!--Condition permettant de sélectionner le genre de l'enseignant déjà renseigné-->
-                            <input type="radio" id="genre1" name="genre" value="M" <?php if ($teacher['teaGender'] == 'M') { ?>checked<?php } ?>>
-                            <label for="genre1">Homme</label>
-                            <input type="radio" id="genre2" name="genre" value="F" <?php if ($teacher['teaGender'] == 'F') { ?>checked<?php } ?>>
-                            <label for="genre2">Femme</label>
-                            <input type="radio" id="genre3" name="genre" value="A" <?php if ($teacher['teaGender'] == 'A') { ?>checked<?php } ?>>
-                            <label for="genre3">Autre</label>
-                        <p style="color:red;">
-                            <?php if ($_POST and $genreIsNotFilled) echo ERRORVOID;
-                            ?>
-                        </p>
-                        </p>
-                        <p>
-                            <label for="firstName">Nom :</label>
-                            <input type="text" name="firstName" id="firstName" value="<?php echo $teacher['teaFirstname'] ?>">
-                        <p style="color:red;">
-                            <?php if ($_POST and $firstNameIsNotFilled) echo ERRORVOID;
-                            ?>
-                        </p>
-                        </p>
-                        <p>
-                            <label for="name">Prénom :</label>
-                            <input type="text" name="name" id="name" value="<?php echo $teacher['teaName'] ?>">
-                        <p style="color:red;">
-                            <?php if ($_POST and $nameIsNotFilled) echo ERRORVOID;
-                            ?>
-                        </p>
-                        </p>
-                        <p>
-                            <label for="nickName">Surnom :</label>
-                            <input type="text" name="nickName" id="nickName" value="<?php echo $teacher['teaNickname'] ?>">
-                        <p style="color:red;">
-                            <?php if ($_POST and $nickNameIsNotFilled) echo ERRORVOID;
-                            ?>
-                        </p>
-                        </p>
-                        <p>
-                            <label for="origin">Origine :</label>
-                            <textarea name="origin" id="origin"><?php echo $teacher['teaOrigine'] ?></textarea>
-                        </p>
-                        <p>
-                            <label style="display: none" for="section"></label>
-                            <select name="section" id="section">
-                                <option value="">Section</option>
-                                <!--Condition permettant de sélectionner la section de l'enseignant déjà renseigné-->
-                                <?php
-                                $html = "";
-                                foreach ($sections as $section) {
-
-                                    $html .= "<option value='" . $section["idSection"]  . "' ";
-                                    if ($section["idSection"] === $teacher["fkSection"]) {
-
-                                        $html .= " selected ";
-                                    }
-                                    $html .= " >" . ($section["secName"]) . "</option>";
-                                }
-                                echo $html;
-                                ?>
-                            </select>
-                        </p>
-                        <p style="color:red;">
-                            <?php if ($_POST and $sectionIsNotFilled) echo ERRORVOID;
-                            ?>
-                        <p>
-                        <div>
-                            <img src=<?php echo $teacher["teaPhoto"] ?>>
-                        </div>
-                        <label for="downloadImg">Photo de l'enseignant (format jpg/png) :</label>
-                        <br>
-                        <input type="file" name="downloadImg" id="downloadImg" />
-                        <br>
-                        <a href="https://convertio.co/fr/convertisseur-jpg/" target="_blank">Convertissez votre fichier au format jpg/png en cliquant ici</a>
-                        <p style="color:red;">
+    <div class="container">
+        <fieldset class="mb-5 mt-4">
+            <div class="user-body">
+                <form action="#" method="post" id="form" enctype="multipart/form-data">
+                    <h3>Modifier un enseignant</h3>
+                    <p>
+                        <!--Condition permettant de sélectionner le genre de l'enseignant déjà renseigné-->
+                        <input type="radio" id="genre1" name="genre" value="M" <?php if ($teacher['teaGender'] == 'M') { ?>checked<?php } ?>>
+                        <label for="genre1">Homme</label>
+                        <input type="radio" id="genre2" name="genre" value="F" <?php if ($teacher['teaGender'] == 'F') { ?>checked<?php } ?>>
+                        <label for="genre2">Femme</label>
+                        <input type="radio" id="genre3" name="genre" value="A" <?php if ($teacher['teaGender'] == 'A') { ?>checked<?php } ?>>
+                        <label for="genre3">Autre</label>
+                    <p style="color:red;">
+                        <?php if ($_POST and $genreIsNotFilled) echo ERRORVOID;
+                        ?>
+                    </p>
+                    </p>
+                    <p>
+                        <label for="firstName">Nom :</label>
+                        <input type="text" name="firstName" id="firstName" value="<?php echo $teacher['teaFirstname'] ?>">
+                    <p style="color:red;">
+                        <?php if ($_POST and $firstNameIsNotFilled) echo ERRORVOID;
+                        ?>
+                    </p>
+                    </p>
+                    <p>
+                        <label for="name">Prénom :</label>
+                        <input type="text" name="name" id="name" value="<?php echo $teacher['teaName'] ?>">
+                    <p style="color:red;">
+                        <?php if ($_POST and $nameIsNotFilled) echo ERRORVOID;
+                        ?>
+                    </p>
+                    </p>
+                    <p>
+                        <label for="nickName">Surnom :</label>
+                        <input type="text" name="nickName" id="nickName" value="<?php echo $teacher['teaNickname'] ?>">
+                    <p style="color:red;">
+                        <?php if ($_POST and $nickNameIsNotFilled) echo ERRORVOID;
+                        ?>
+                    </p>
+                    </p>
+                    <p>
+                        <label for="origin">Origine :</label>
+                        <textarea name="origin" id="origin"><?php echo $teacher['teaOrigine'] ?></textarea>
+                    </p>
+                    <p>
+                        <label style="display: none" for="section"></label>
+                        <select name="section" id="section">
+                            <option value="">Section</option>
+                            <!--Condition permettant de sélectionner la section de l'enseignant déjà renseigné-->
                             <?php
-                            if (($imageData["fileNameImg"] != null)) {
-                                if ($_POST and ($imageData["extensionImg"] != "jpg" and $imageData["extensionImg"] != "png")) {
-                                    echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                                } else if ($imageData["extensionImg"] == "jpg" or $imageData["extensionImg"] == "png") {
-                                    echo "Votre fichier a bien été téléchargé";
+                            $html = "";
+                            foreach ($sections as $section) {
+
+                                $html .= "<option value='" . $section["idSection"]  . "' ";
+                                if ($section["idSection"] === $teacher["fkSection"]) {
+
+                                    $html .= " selected ";
                                 }
+                                $html .= " >" . ($section["secName"]) . "</option>";
                             }
+                            echo $html;
                             ?>
-                        </p>
-                        <p>
-                            <input type="submit" value="Modifier">
-                        </p>
-                    </form>
-                </div>
-        </div>
+                        </select>
+                    </p>
+                    <p style="color:red;">
+                        <?php if ($_POST and $sectionIsNotFilled) echo ERRORVOID;
+                        ?>
+                    <p>
+                    <div>
+                        <img src=<?php echo $teacher["teaPhoto"] ?>>
+                    </div>
+                    <label for="downloadImg">Photo de l'enseignant (format jpg/png) :</label>
+                    <br>
+                    <input type="file" name="downloadImg" id="downloadImg" />
+                    <br>
+                    <a href="https://convertio.co/fr/convertisseur-jpg/" target="_blank">Convertissez votre fichier au format jpg/png en cliquant ici</a>
+                    <p style="color:red;">
+                        <?php
+                        if (($imageData["fileNameImg"] != null)) {
+                            if ($_POST and ($imageData["extensionImg"] != "jpg" and $imageData["extensionImg"] != "png")) {
+                                echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
+                            } else if ($imageData["extensionImg"] == "jpg" or $imageData["extensionImg"] == "png") {
+                                echo "Votre fichier a bien été téléchargé";
+                            }
+                        }
+                        ?>
+                    </p>
+                    <p>
+                        <input type="submit" value="Modifier">
+                    </p>
+                </form>
+            </div>
+    </div>
 </body>
 
 </html>

@@ -9,16 +9,14 @@
 
 session_start();
 
-if ($_SESSION['userConnected'] != 1 or 2) {
+if ($_SESSION['userConnected'] != (1 or 2)) {
     header('HTTP/1.0 403 Forbidden', true, 403);
-    require_once(__DIR__ . "/../includes/403.php");
+    require_once(__DIR__ . "/403.php");
     exit;
 }
 
-include("Database.php");
 include("header.php");
 
-$db = new Database();
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url
 $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
 
@@ -44,7 +42,7 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
         <div class="container">
             <div class="user-body">
                 <h3>Informations de l'enseignant : </h3> <?php
-                echo "Nom de famille : " . $OneTeacher["teaName"] . "<br>" . "Prénom : " . $OneTeacher["teaFirstname"] . "<br>" ?>
+                                                            echo "Nom de famille : " . $OneTeacher["teaName"] . "<br>" . "Prénom : " . $OneTeacher["teaFirstname"] . "<br>" ?>
                 <?php
                 //Affiche une image différente en fonction du genre de l'enseignant (se base sur la valeur de teaGender)
                 if ($OneTeacher["teaGender"] == "M") {
@@ -86,4 +84,4 @@ $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
 
 </html>
 
-<?php include("footer.php");?>
+<?php include("footer.php"); ?>

@@ -10,13 +10,7 @@
 
 session_start();
 
-
-include("Database.php");
-$db = new Database();
-
 include("header.php");
-
-
 
 $sections = $db->getAllSections();
 
@@ -28,9 +22,9 @@ if (isset($_GET) and $id = $_GET['idTeacher']) {
 }
 
 // Vérifie si le formulaire a été soumis
-if (isset($_POST['submit'])) {
+if (isset($_GET['submit'])) {
     // Récupère la valeur entrée dans le champ de texte
-    $teachers = $db->sortTeachers($_POST);
+    $teachers = $db->sortTeachers($_GET);
 }
 
 ?>
@@ -53,7 +47,7 @@ if (isset($_POST['submit'])) {
     <div class="container">
         <fieldset class="mb-2 mt-5">
             <h5>Filtres</h5>
-            <form method="POST" action="" class="row g-3">
+            <form method="GET" action="" class="row g-3">
                 <div class="col-2">
                     <label for="search" class="form-label">Nom</label>
                     <input type="text" name="search" id="search" class="form-control">
