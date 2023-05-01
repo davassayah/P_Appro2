@@ -7,14 +7,13 @@
  * Description: Page permettant d'ajouter un enseignant à la db
  */
 
+ include("header.php");
+
 if ($_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
 }
-
-include("Database.php");
-include("header.php");
 
 const ERRORVOID = "*Obligatoire";
 

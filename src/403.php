@@ -10,7 +10,9 @@
 </head>
 
 <body>
-    <h1>HTTP403 - Vous n'avez pas les droits pour accéder à cette page</h1>
+    <h1>HTTP403 - Vous n'avez pas les droits pour accéder à cette page <br>
+        Connectez-vous ou retournez à la page d'<a href="index.php">accueil</a>
+    </h1>
 </body>
 
 </html>

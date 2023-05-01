@@ -4,16 +4,6 @@ session_start();
 require_once 'Database.php';
 $db = Database::getInstance();
 
-// Déconnexion de l'utilisateur
-if (isset($_POST['logout'])) {
-    session_unset();
-    session_destroy();
-    header('Location: index.php');
-}
-
-//Vérifie les identifiants de l'utilisateur grâce à la méthode CheckAuth. Si les informations n'existent ou ne correspondent pas, la valeur est nulle et une erreur s'affiche.
-//Si la valeur de $user n'est pas null (les identifiants sont valides) l'utilisateur est connecté en tant qu'utilisateur si la valeur de userAdministrator est 0.
-//Si la valeur de userAdministrator est 1 l'utilisateur est connecté en tant qu'administrateur et la valeur de userConnected est 2.
 if (isset($_POST['user']) && isset($_POST['password'])) {
     $user = $db->CheckAuth($_POST['user'], $_POST['password']);
     if ($user == null) {
@@ -24,6 +14,15 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         $_SESSION['userId'] = $user['idUser'];
         $_SESSION['useLogin'] = $db->getOneUser($_SESSION['userId'])['useLogin'];
     }
+}
+
+
+var_dump($_SESSION['userConnected']);
+// Déconnexion de l'utilisateur
+if (isset($_POST['logout'])) {
+    session_unset();
+    session_destroy();
+    header('Location: index.php');
 }
 
 ?>

@@ -7,13 +7,13 @@
  * Description: Page permettant d'afficher toutes les informations d'un enseignant
  */
 
+ include("header.php");
+
 if ($_SESSION['userConnected'] != (1 or 2)) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
 }
-
-include("header.php");
 
 //Récupère les informations de l'enseignant via son id qui se trouve dans l'url
 $OneTeacher = $db->getOneTeacher($_GET["idTeacher"]);
