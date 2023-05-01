@@ -18,7 +18,7 @@ $sections = $db->getAllSections();
 
 $teachers = $db->getAllTeachers();
 //Récupère l'id de l'enseignant dans l'url pour le supprimer
-if (isset($_GET) and $id = $_GET['idTeacher']) {
+if (isset($_GET['idTeacher']) and $id = $_GET['idTeacher']) {
     $db->DeleteTeacherById($id);
     header('Location: index.php');
 }
@@ -121,9 +121,8 @@ if (isset($_GET['submit'])) {
                                 <td><?php echo $teacher["teaSectionName"] ?></td>
                                 <td class="containerOptions">
                                     <!--Affiche différentes fonctionnalités selon que l'utilisateur soit connecté en tant qu'utilisateur ou en tant qu'admin-->
-                                    <?php if ($_SESSION['userConnected'] >= 1) { ?>
-                                        <?php if ($_SESSION['userConnected'] == 1) {
-                                        ?>
+                                    <?php if (isset($_SESSION['userConnected']) && $_SESSION['userConnected'] >= 1) { ?>
+                                        <?php if (isset($_SESSION['userConnected']) && $_SESSION['userConnected'] == 1) { ?>
                                             <a class="link-light" href="updateTeacher.php?idTeacher=<?php echo $teacher["idTeacher"]; ?>">
                                                 <img height="20em" src="./img/edit.png" alt="edit">
                                             </a>

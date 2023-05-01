@@ -9,7 +9,7 @@
 
  include("header.php");
 
-if ($_SESSION['userConnected'] != 1) {
+ if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
@@ -152,13 +152,14 @@ $sections = $db->getAllSections();
                     <a href="https://convertio.co/fr/convertisseur-jpg/" target="_blank">Convertissez votre fichier au format jpg/png en cliquant ici</a>
                     <p style="color:red;">
                         <?php
-                        if (($imageData["fileNameImg"] != null)) {
-                            if ($_POST and ($imageData["extensionImg"] != "jpg" and $imageData["extensionImg"] != "png")) {
-                                echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                            } else if ($imageData["extensionImg"] == "jpg" or $imageData["extensionImg"] == "png") {
-                                echo "Votre fichier a bien été téléchargé";
-                            }
+                       if (isset($imageData["fileNameImg"]) && $imageData["fileNameImg"] != null) {
+                        if ($_POST && ($imageData["extensionImg"] != "jpg" && $imageData["extensionImg"] != "png")) {
+                            echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
+                        } else if ($imageData["extensionImg"] == "jpg" || $imageData["extensionImg"] == "png") {
+                            echo "Votre fichier a bien été téléchargé";
                         }
+                    }
+                    
                         ?>
                     </p>
                     <p>

@@ -9,7 +9,7 @@
 
 include("header.php");
 
-if ($_SESSION['userConnected'] != 1) {
+if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
@@ -78,7 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h3>Ajout d'un enseignant</h3>
                     <br>
                     <p style="color:red;">
-                        <?php echo $errorOrValidationMessage ?>
+                    <?php if (isset($errorOrValidationMessage)) { echo $errorOrValidationMessage; } ?>
+
                     </p>
                     <p>
                         <input type="radio" id="genre1" name="genre" value="M" checked>
@@ -147,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             echo ERRORVOID;
                         } else if ($_POST and ($imageData['extensionImg'] != "jpg" and $imageData['extensionImg'] != "png")) {
                             echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                        } else if ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png") {
+                        } else if (isset($imageData['extensionImg']) && ($imageData['extensionImg'] == "jpg" || $imageData['extensionImg'] == "png")) {
                             echo "Votre fichier a bien été téléchargé";
                         }
                         ?>
