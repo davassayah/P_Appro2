@@ -47,7 +47,7 @@ if (isset($_GET['submit'])) {
 
 <body>
     <div class="container">
-        <fieldset class="mb-2 mt-5">
+        <fieldset class="help mb-2 mt-5">
             <h5>Filtres</h5>
             <form method="GET" action="" class="row g-3">
                 <div class="col-2">
@@ -60,7 +60,7 @@ if (isset($_GET['submit'])) {
                 <div id="filter-section" class="col-2 d-none">
                     <label for="section_id" class="form-label">Section</label>
                     <select name="section_id" id="section_id" class="form-select" aria-label="Default select example">
-                        <option value="">Select...</option>
+                        <option value="">Section</option>
                         <?php foreach ($sections as $section) { ?>
                             <option value="<?php echo $section["idSection"] ?>"><?php echo $section["secName"] ?></option>
                         <?php } ?>
@@ -85,7 +85,7 @@ if (isset($_GET['submit'])) {
                     <input type="submit" name="submit" value="Rechercher" class="btn btn-success btn-sm">
                 </div>
             </form>
-            <h3 class="mb-3 mt-3">Liste des enseignants</h3>
+            <h3 class="mb-3">Liste des enseignants</h3>
 
             <form action="#" method="post">
                 <table id="table-avec-sort" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">

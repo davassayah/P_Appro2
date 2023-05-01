@@ -9,7 +9,7 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
     if ($user == null) {
         echo "erreur de connexion";
     } else if ($user != null) {
-        // echo "vous êtes connecté";
+        //echo "vous êtes connecté";
         $_SESSION['userConnected'] = $user['useAdministrator'];
         $_SESSION['userId'] = $user['idUser'];
         $_SESSION['useLogin'] = $db->getOneUser($_SESSION['userId'])['useLogin'];
@@ -21,6 +21,7 @@ if (isset($_POST['logout'])) {
     session_unset();
     session_destroy();
     header('Location: index.php');
+    exit;
 }
 
 ?>
@@ -55,8 +56,13 @@ if (isset($_POST['logout'])) {
                     }
                     ?>
                     <?php
-                    if (isset($_SESSION['userConnected']) && $_SESSION['userConnected'] >= 1) {
-                        echo '<form class="login-flex" action="" method="post">';
+                    if (isset($_SESSION['userConnected']) && $_SESSION['userConnected'] == 1) {
+                        echo '<form class="nav-admin" action="" method="post">';
+                        echo '<span class="nav-item text-white text-nowrap">Bienvenue ' . $_SESSION['useLogin'] . '</span>';
+                        echo '<button class="btn btn-outline-danger mx-3" type="submit" name="logout">Déconnexion</button>';
+                        echo '</form>';
+                    } else if (isset($_SESSION['userConnected']) && $_SESSION['userConnected'] == 2) {
+                        echo '<form class="nav-user" action="" method="post">';
                         echo '<span class="nav-item text-white text-nowrap">Bienvenue ' . $_SESSION['useLogin'] . '</span>';
                         echo '<button class="btn btn-outline-danger mx-3" type="submit" name="logout">Déconnexion</button>';
                         echo '</form>';

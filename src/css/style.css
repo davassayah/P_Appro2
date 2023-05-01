@@ -75,8 +75,17 @@ label {
     margin-left: 40rem;
 }
 
-.login-flex
+.nav-admin
 {
     margin-left : 23rem;
     margin-top: 10px;
 }
+
+.nav-user{
+    margin-left : 46rem;
+    margin-top: 10px;
+}
+
+.help {
+    padding-bottom: 50px;
+  }

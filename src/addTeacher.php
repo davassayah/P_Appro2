@@ -7,9 +7,9 @@
  * Description: Page permettant d'ajouter un enseignant à la db
  */
 
-include("header.php");
+ include("header.php");
 
-if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
+ if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-    <fieldset class="mb-3 mt-5">
+    <fieldset class="help mb-3 mt-5">
         <div class="container">
             <div class="user-body">
                 <form action="#" method="post" id="form" enctype="multipart/form-data">

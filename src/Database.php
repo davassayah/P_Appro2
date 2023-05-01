@@ -95,6 +95,16 @@
             return $users;
         }
     
+        public function getRoles()
+        {
+            $query = "SELECT DISTINCT useAdministrator FROM t_user";
+            $req = $this->querySimpleExecute($query);
+            $roles = $this->formatData($req);
+    
+            return $roles;
+        }
+    
+
         public function createUser($user)
         {
             $query = "
@@ -120,6 +130,17 @@
             $sections = $this->formatData($req);
             //retourne tous les enseignants
             return $sections;
+        }
+
+        public function getAllRoles()
+        {
+            $query = "SELECT * FROM t_user";
+            //appeler la méthode pour executer la requête
+            $req = $this->querySimpleExecute($query);
+            //appeler la méthode pour avoir le résultat sous forme de tableau
+            $roles = $this->formatData($req);
+            //retourne tous les enseignants
+            return $roles;
         }
     
         //Recupère la liste des informations pour 1 enseignant
@@ -309,8 +330,6 @@
             }
     
             $query .= " ORDER BY tt.teaName ASC";
-    
-            var_dump($query);
     
             $replacements = [];
     

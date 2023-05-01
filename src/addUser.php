@@ -7,9 +7,9 @@
  * Description: Page permettant d'ajouter un enseignant à la db
  */
 
- include("header.php");
+include("header.php");
 
- if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
+if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
@@ -29,8 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 $users = $db->getAllUsers();
+$roles = $db->getRoles();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$loginIsNotFilled and !$passwordIsNotFilled and !$attributionIsNotFilled) {
     $db->createUser($_POST);
     $errorOrValidationMessage = "L'utilisateur a bien été ajouté!";
 } else {
@@ -38,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$genreIsNotFilled and !$firstNameI
         $errorOrValidationMessage = "Merci de bien remplir tous les champs marqués comme obligatoires";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +90,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' and !$genreIsNotFilled and !$firstNameI
                     </p>
                     <input class="btn btn-primary" type="submit" value="Ajouter">
                 </form>
+                <div class="container">
+                    <fieldset class="help mb-2 mt-5">
+                        <h3 class="mb-3">Liste des utilisateurs</h3>
+                        <form action="#" method="post">
+                            <table id="table-avec-sort" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="th-sm">
+                                            Login
+                                        </th>
+                                        <th class="th-sm">
+                                            Rôle
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($users as $user) { ?>
+                                        <tr>
+                                            <td><?php echo $user["useLogin"] ?></td>
+                                            <td><?php if ($user["useAdministrator"] == 1) {
+                                                    echo "Administrateur";
+                                                } else if ($user["useAdministrator"] == 2) {
+                                                    echo "Utilisateur";
+                                                } ?></td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </form>
+                    </fieldset>
+                </div>
+                <script>
+                    $(document).ready(function() {
+                        $('#table-avec-sort').DataTable({
+                            searching: false,
+                            language: {
+                                lengthMenu: "Montrer _MENU_ entrées",
+                                info: "_TOTAL_ résultats trouvés",
+                                paginate: {
+                                    next: "Suivant",
+                                    previous: "Précédent"
+                                }
+                            }
+                        });
+
+                        // Afficher/Cacher les filtres en fonction du bouton "Plus de filtres"
+                        $('#more-filters-btn').click(function() {
+                            $('#filter-section').toggleClass('d-none');
+                            $('#filter-gender').toggleClass('d-none');
+                        });
+                    });
+                </script>
     </fieldset>
     </div>
     </div>
