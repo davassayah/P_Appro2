@@ -7,9 +7,9 @@
  * Description: Page permettant d'ajouter un enseignant à la db
  */
 
- include("header.php");
+include("header.php");
 
- if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
+if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
@@ -18,8 +18,17 @@
 include("uploadImages/RenameImages.php");
 
 const ERRORVOID = "*Obligatoire";
+const ERRORCHAR = "1 à 50 caractères maximum sans chiffre";
+const ERRORNUM = "1 à 10 caractères, seulement des chiffres";
+if (isset($_POST['firstName'])){
+$errorChar = (preg_match('/^[a-zA-Z\s\'\-\é\è\ê\ô\â\ü\ä\ö]{1,50}$/', $_POST['firstName']) == false);
+}
+if (isset($_POST['nickName'])){
+$errorNum = (preg_match('/^[1-9]{4}$/', $_POST['nickName'])== false);
+}
 
 $sections = $db->getAllSections();
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imageData = RenameImages($_FILES, $db);
@@ -38,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         !$nickNameIsNotFilled and
         !$sectionIsNotFilled and
         !$downloadImgIsNotFilled and
+        !$errorChar and
+        !$errorNum and
         ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png")
     ) {
-
         move_uploaded_file($imageData['fileTmpNameImg'], $imageData['uploadPathImg']);
-
         // On ne changera pas la valeur de $_POST en sachant que ce sont des variables read-only.
         // Ce qui veut dire qu'on ne nommera pas une varaible comme ceci -> $_POST['imPath'] = xyz !!!!!!
         // On rajoutera les variables hors formulaire en tant que params.
@@ -78,8 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h3>Ajout d'un enseignant</h3>
                     <br>
                     <p style="color:red;">
-                    <?php if (isset($errorOrValidationMessage)) { echo $errorOrValidationMessage; } ?>
-
+                        <?php if (isset($errorOrValidationMessage)) {
+                            echo $errorOrValidationMessage;
+                        } ?>
                     </p>
                     <p>
                         <input type="radio" id="genre1" name="genre" value="M" checked>
@@ -92,11 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php if ($_POST and $genreIsNotFilled) echo ERRORVOID;
                         ?>
                     </p>
-                    <p>
-                        <label for="firstName">Prénom :</label>
-                        <input type="text" name="firstName" id="firstName" value=<?php if (isset($firstname)) echo $firstname ?>>
+                    <label for="firstName">Prénom :</label>
+                    <input type="text" name="firstName" id="firstName" value=<?php if (isset($firstname)) echo $firstname ?>>
                     <p style="color:red;">
                         <?php if ($_POST and $firstNameIsNotFilled) echo ERRORVOID;
+                        else if ($_POST and ($errorChar)) echo ERRORCHAR;
                         ?>
                     </p>
                     </p>
@@ -109,11 +119,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </p>
                     </p>
                     <p>
+                    <p>
                         <label for="nickName">Surnom :</label>
                         <input type="text" name="nickName" id="nickName" value=<?php if (isset($nickName)) echo $nickName ?>>
+                    </p>
                     <p style="color:red;">
                         <?php if ($_POST and $nickNameIsNotFilled) echo ERRORVOID;
-                        ?>
+                         else if ($_POST and ($errorNum)) echo ERRORNUM; ?>
                     </p>
                     <p>
                         <label for="origin">Origine :</label>
@@ -149,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         } else if ($_POST and ($imageData['extensionImg'] != "jpg" and $imageData['extensionImg'] != "png")) {
                             echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
                         } else if (isset($imageData['extensionImg']) && ($imageData['extensionImg'] == "jpg" || $imageData['extensionImg'] == "png")) {
-                            echo "Votre fichier a bien été téléchargé";
+                            echo "";
                         }
                         ?>
                     </p>

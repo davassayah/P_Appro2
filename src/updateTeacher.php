@@ -7,9 +7,9 @@
  * Description: Page permettant de modifier les informations d'un enseignant
  */
 
- include("header.php");
+include("header.php");
 
- if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
+if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
     require_once(__DIR__ . "/403.php");
     exit;
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $imageData = UpdateImages($_FILES, $teacher);
     $_POST["imgPath"] = $imageData["imgPath"];
 
-    $genreIsNotFilled =  ($_POST["genre"] == null);
+    $genreIsNotFilled = ($_POST["genre"] == null);
     $firstNameIsNotFilled = ($_POST["firstName"] == null);
     $nameIsNotFilled = ($_POST["name"] == null);
     $nickNameIsNotFilled = ($_POST["nickName"] == null);
@@ -46,11 +46,11 @@ if (
     die();
 } else if ($_POST and ($imageData["extensionImg"] != "jpg" or $imageData["extensionImg"] != "png") and $imageData["fileNameImg"] != null) {
     echo "Merci de vérifier que tous les champs sont bien remplis correctement et que l'extension du fichier est jpg/png";
-} else
-    if ($_POST and ($imageData["fileNameImg"] == null)) {
+} else if ($_POST and !$genreIsNotFilled and !$firstNameIsNotFilled and !$nameIsNotFilled and !$nickNameIsNotFilled
+    and !$sectionIsNotFilled and ($imageData["fileNameImg"] == null)) {
     $db->UpdateTeacherById($_GET["idTeacher"], $_POST);
     header('Location: index.php');
-}
+} else if ($_POST) {echo "Merci de vérifier que tous les champs sont bien remplis correctement et que l'extension du fichier est jpg/png";}
 
 $sections = $db->getAllSections();
 
@@ -152,14 +152,14 @@ $sections = $db->getAllSections();
                     <a href="https://convertio.co/fr/convertisseur-jpg/" target="_blank">Convertissez votre fichier au format jpg/png en cliquant ici</a>
                     <p style="color:red;">
                         <?php
-                       if (isset($imageData["fileNameImg"]) && $imageData["fileNameImg"] != null) {
-                        if ($_POST && ($imageData["extensionImg"] != "jpg" && $imageData["extensionImg"] != "png")) {
-                            echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                        } else if ($imageData["extensionImg"] == "jpg" || $imageData["extensionImg"] == "png") {
-                            echo "Votre fichier a bien été téléchargé";
+                        if (isset($imageData["fileNameImg"]) && $imageData["fileNameImg"] != null) {
+                            if ($_POST && ($imageData["extensionImg"] != "jpg" && $imageData["extensionImg"] != "png")) {
+                                echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
+                            } else if ($imageData["extensionImg"] == "jpg" || $imageData["extensionImg"] == "png") {
+                                echo "Votre fichier a bien été téléchargé";
+                            }
                         }
-                    }
-                    
+
                         ?>
                     </p>
                     <p>
