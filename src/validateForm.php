@@ -9,6 +9,8 @@
  */
 
 const ERROR_GENDER_REQUIRED    = "Veuillez renseigner le champ genre de l'enseignant";
+const ERROR_IMAGE_REQUIRED    = "Veuillez ajouter l'image de l'enseignant";
+const ERROR_IMAGE_EXTENSION    = "Seuls les formats jpg/png sont acceptés";
 const ERROR_FIRSTNAME_REQUIRED = "Veuillez renseigner le champ prénom de l'enseignant";
 const ERROR_LASTNAME_REQUIRED  = "Veuillez renseigner le champ nom de l'enseignant";
 const ERROR_NICKNAME_REQUIRED  = "Veuillez renseigner le champ surnom de l'enseignant";
@@ -43,8 +45,9 @@ function validationSectionForm()
     return ["name" => $name, "errors" => $errors];
 }
 
-function validationTeacherForm()
+function validationTeacherForm($db)
 {
+
     // ATTENTION
     // Si on désinfecte les data avec FILTER_SANITIZE_FULL_SPECIAL_CHARS
     // on obtient des strings qui ont été modifiées avec des < ou > ou & etc
@@ -55,29 +58,47 @@ function validationTeacherForm()
 
     // On commence par désinfecter les données saisies par l'utilisateur
     // ainsi on se protège contre les attaques de types XSS
+    $imageData = RenameImages($_FILES, $db);
+
 
     $userData = filter_input_array(
         INPUT_POST,
         [
-            'gender'    => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'genre' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             // on ne filtre pas les 3 champs car on veut effectuer une validation par REGEX
             // tout en affichant une erreur précise à l'utilisateur
             'firstName' => $_POST['firstName'],
-            'lastName'  => $_POST['lastName'],
-            'nickname'  => $_POST['nickname'],
-            'origine'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'name'  => $_POST['name'],
+            'nickName'  => $_POST['nickName'],
+            'origin'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'section'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         ]
     );
 
-    // Si certains champs n'ont pas été saisies alors on donne la valeur ''
-    $gender    = $userData['gender']    ?? '';
-    $firstName = $userData['firstName'] ?? '';
-    $lastName  = $userData['lastName']  ?? '';
-    $nickname  = $userData['nickname']  ?? '';
-    $origine   = $userData['origine']   ?? '';
-    $section   = $userData['section']   ?? '';
+    $userData['imageData'] = $imageData;
 
+    // Image
+
+    $downloadImgIsNotFilled = ($imageData["downloadImg"] == null);
+
+    // echo "<pre>";
+    // var_dump($userData);
+    // echo "</pre>";
+
+    // echo "<pre>";
+    // var_dump($_POST);
+    // echo "</pre>";
+
+
+
+    // Si certains champs n'ont pas été saisies alors on donne la valeur ''
+    $genre    = $userData['genre']    ?? '';
+    $firstName = $userData['firstName'] ?? '';
+    $name = $userData['name']  ?? '';
+    $nickName  = $userData['nickName']  ?? '';
+    $origin   = $userData['origin']   ?? '';
+    $section   = $userData['section']   ?? '';
+    $downloadImg = $userData['imageData']['downloadImg']['size'] ?? '';
     $errors = [];
 
     //
@@ -85,8 +106,8 @@ function validationTeacherForm()
     //
 
     // le champ genre est obligatoire
-    if (!$gender) {
-        $errors['gender'] = ERROR_GENDER_REQUIRED;
+    if (!$genre) {
+        $errors['genre'] = ERROR_GENDER_REQUIRED;
     }
 
     // le champ prénom :
@@ -96,55 +117,61 @@ function validationTeacherForm()
     if (!$firstName) {
         $errors['firstName'] = ERROR_FIRSTNAME_REQUIRED;
     } elseif (!filter_var(
-        $lastName,
+        $firstName,
         FILTER_VALIDATE_REGEXP,
         array(
             "options" => array("regexp" => REGEX_STRING)
         )
     )) {
-        $errors["lastName"] = ERROR_STRING;
+        $errors["firstName"] = ERROR_STRING;
     }
     // le champ nom
     // - est obligatoire
     // - doit être une string entre 2 et 30 caractères
     // - répondant à la REGEX 'REGEX_STRING'
-    if (!$lastName) {
-        $errors['lastName'] = ERROR_LASTNAME_REQUIRED;
+    if (!$name) {
+        $errors['name'] = ERROR_LASTNAME_REQUIRED;
     } elseif (!filter_var(
-        $lastName,
+        $name,
         FILTER_VALIDATE_REGEXP,
         array(
             "options" => array("regexp" => REGEX_STRING)
         )
     )) {
-        $errors["lastName"] = ERROR_STRING;
+        $errors["name"] = ERROR_STRING;
     }
 
     // le champ surnom
     // - est obligatoire
     // - doit être une string entre 2 et 30 caractères
     // - répondant à la REGEX 'REGEX_STRING'
-    if (!$nickname) {
-        $errors['nickname'] = ERROR_NICKNAME_REQUIRED;
+    if (!$nickName) {
+        $errors['nickName'] = ERROR_NICKNAME_REQUIRED;
     } elseif (!filter_var(
-        $nickname,
+        $nickName,
         FILTER_VALIDATE_REGEXP,
         array(
             "options" => array("regexp" => REGEX_STRING)
         )
     )) {
-        $errors["nickname"] = ERROR_STRING;
+        $errors["nickName"] = ERROR_STRING;
     }
 
     // le champ origine est obligatoire
-    if (!$origine) {
-        $errors['origine'] = ERROR_ORIGIN_REQUIRED;
+    if (!$origin) {
+        $errors['origin'] = ERROR_ORIGIN_REQUIRED;
     }
 
     // le champ section est obligatoire et ne peut donc pas avoir
     // la valeur "Section"
     if (!$section || $section === "Section") {
         $errors['section'] = ERROR_SECTION_REQUIRED;
+    }
+
+    if (!$downloadImg) {
+        $errors['downloadImg'] = ERROR_IMAGE_REQUIRED;
+    } elseif (( $imageData['extensionImg'] != "jpg")) {
+        $errors["downloadImg"] = ERROR_IMAGE_EXTENSION;
     }
 
     return ["userData" => $userData, "errors" => $errors];

@@ -8,6 +8,7 @@
  */
 
 include("header.php");
+include_once(__DIR__ . "/validateForm.php");
 
 if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
@@ -18,44 +19,31 @@ if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
 include("uploadImages/RenameImages.php");
 
 const ERRORVOID = "*Obligatoire";
-const ERRORCHAR = "1 à 50 caractères maximum sans chiffre";
-const ERRORNUM = "1 à 10 caractères, seulement des chiffres";
-if (isset($_POST['firstName'])){
-$errorChar = (preg_match('/^[a-zA-Z\s\'\-\é\è\ê\ô\â\ü\ä\ö]{1,50}$/', $_POST['firstName']) == false);
-}
-if (isset($_POST['nickName'])){
-$errorNum = (preg_match('/^[1-9]{4}$/', $_POST['nickName'])== false);
-}
 
 $sections = $db->getAllSections();
 
+$errors  = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $imageData = RenameImages($_FILES, $db);
-    $genreIsNotFilled = ($_POST["genre"] == null);
-    $firstNameIsNotFilled = ($_POST["firstName"] == null);
-    $nameIsNotFilled = ($_POST["name"] == null);
-    $nickNameIsNotFilled = ($_POST["nickName"] == null);
-    $sectionIsNotFilled = ($_POST["section"] == null);
-    $downloadImgIsNotFilled = ($imageData["downloadImg"] == null);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    //Si le formulaire a été envoyé alors un nouvel enseignant est crée 
-    if (
-        !$genreIsNotFilled and
-        !$firstNameIsNotFilled and
-        !$nameIsNotFilled and
-        !$nickNameIsNotFilled and
-        !$sectionIsNotFilled and
-        !$downloadImgIsNotFilled and
-        !$errorChar and
-        !$errorNum and
-        ($imageData['extensionImg'] == "jpg" or $imageData['extensionImg'] == "png")
-    ) {
+    $result = validationTeacherForm($db);
+    $errors = $result["errors"];
+    $userData = $result["userData"];
+
+    // Si aucune erreur de validation 
+    // Cela signifie que les données sont propres et validées
+    // Nous pouvons insérer les données en BD
+    if (count($errors) === 0) {
         move_uploaded_file($imageData['fileTmpNameImg'], $imageData['uploadPathImg']);
         // On ne changera pas la valeur de $_POST en sachant que ce sont des variables read-only.
         // Ce qui veut dire qu'on ne nommera pas une varaible comme ceci -> $_POST['imPath'] = xyz !!!!!!
         // On rajoutera les variables hors formulaire en tant que params.
         $teachers = $db->InsertTeacher($_POST, $imageData);
+
+        echo "<pre>";
+        var_dump($imageData);
+        echo "</pre>";
+
         $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
     } else {
         if ($_POST) {
@@ -98,24 +86,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="genre2">Femme</label>
                         <input type="radio" id="genre3" name="genre" value="A">
                         <label for="genre3">Autre</label>
-                    <p style="color:red;">
-                        <?php if ($_POST and $genreIsNotFilled) echo ERRORVOID;
-                        ?>
-                    </p>
-                    <label for="firstName">Prénom :</label>
-                    <input type="text" name="firstName" id="firstName" value=<?php if (isset($firstname)) echo $firstname ?>>
-                    <p style="color:red;">
-                        <?php if ($_POST and $firstNameIsNotFilled) echo ERRORVOID;
-                        else if ($_POST and ($errorChar)) echo ERRORCHAR;
-                        ?>
-                    </p>
+                        <span id="show-error">
+                            <?= array_key_exists("genre", $errors) && $errors["genre"] ? '<p style="color:red;">' . $errors["genre"] . '</p>' : '' ?>
+                        </span>
+                        <br><br>
+                        <label for="firstName">Prénom :</label>
+                        <input type="text" name="firstName" id="firstName" value=<?php if (isset($firstname)) echo $firstname ?>>
+                        <span id="show-error">
+                            <?= array_key_exists("firstName", $errors) && $errors["firstName"] ? '<p style="color:red;">' . $errors["firstName"] . '</p>' : '' ?>
+                        </span>
                     </p>
                     <p>
                         <label for="name">Nom :</label>
                         <input type="text" name="name" id="name" value=<?php if (isset($name)) echo $name ?>>
-                    <p style="color:red;">
-                        <?php if ($_POST and $nameIsNotFilled) echo ERRORVOID;
-                        ?>
+                        <span id="show-error">
+                            <?= array_key_exists("name", $errors) && $errors["name"] ? '<p style="color:red;">' . $errors["name"] . '</p>' : '' ?>
+                        </span>
                     </p>
                     </p>
                     <p>
@@ -124,8 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" name="nickName" id="nickName" value=<?php if (isset($nickName)) echo $nickName ?>>
                     </p>
                     <p style="color:red;">
-                        <?php if ($_POST and $nickNameIsNotFilled) echo ERRORVOID;
-                         else if ($_POST and ($errorNum)) echo ERRORNUM; ?>
+                        <span id="show-error">
+                            <?= array_key_exists("nickName", $errors) && $errors["nickName"] ? '<p style="color:red;">' . $errors["nickName"] . '</p>' : '' ?>
+                        </span>
                     </p>
                     <p>
                         <label for="origin">Origine :</label>
@@ -145,25 +132,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             ?>
                         </select>
                     </p>
-                    <p style="color:red;">
-                        <?php if ($_POST and $sectionIsNotFilled) echo ERRORVOID;
-                        ?>
-                    </p>
+                    <span id="show-error">
+                        <?= array_key_exists("section", $errors) && $errors["section"] ? '<p style="color:red;">' . $errors["section"] . '</p>' : '' ?>
+                    </span>
                     <p>
                         <label for="downloadImg">Photo de l'enseignant (format jpg/png) :</label>
                         <br>
                         <input type="file" name="downloadImg" id="downloadImg" />
                         <br>
                         <a href="https://convertio.co/fr/convertisseur-jpg/">Convertissez votre fichier au format jpg/png en cliquant ici</a>
-                    <p style="color:red;">
-                        <?php if ($_POST and $downloadImgIsNotFilled) {
-                            echo ERRORVOID;
-                        } else if ($_POST and ($imageData['extensionImg'] != "jpg" and $imageData['extensionImg'] != "png")) {
-                            echo "Votre fichier n'est pas au bon format, merci d'utiliser le convertisseur jpg/png";
-                        } else if (isset($imageData['extensionImg']) && ($imageData['extensionImg'] == "jpg" || $imageData['extensionImg'] == "png")) {
-                            echo "";
-                        }
-                        ?>
+                        <span id="show-error">
+                            <?= array_key_exists("downloadImg", $errors) && $errors["downloadImg"] ? '<p style="color:red;">' . $errors["downloadImg"] . '</p>' : '' ?>
+                        </span>
                     </p>
                     <p>
                         <input type="submit" value="Ajouter">
