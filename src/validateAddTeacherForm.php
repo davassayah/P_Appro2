@@ -25,26 +25,6 @@ const ERROR_SECTION_NAME_REQUIRED  = "Veuillez renseigner le champ nom de la sec
 
 const REGEX_STRING = '/^[a-zàâçéèêîïôûù -]{2,30}$/mi';
 
-function validationSectionForm()
-{
-    $name = $_POST['name'] ?? '';
-    $errors = [];
-
-    if (!$name) {
-        $errors['name'] = ERROR_SECTION_NAME_REQUIRED;
-    } elseif (!filter_var(
-        $name,
-        FILTER_VALIDATE_REGEXP,
-        array(
-            "options" => array("regexp" => REGEX_STRING)
-        )
-    )) {
-        $errors["name"] = ERROR_STRING;
-    }
-
-    return ["name" => $name, "errors" => $errors];
-}
-
 function validationTeacherForm($db)
 {
 
@@ -58,8 +38,6 @@ function validationTeacherForm($db)
 
     // On commence par désinfecter les données saisies par l'utilisateur
     // ainsi on se protège contre les attaques de types XSS
-    $imageData = RenameImages($_FILES, $db);
-
 
     $userData = filter_input_array(
         INPUT_POST,
@@ -69,27 +47,20 @@ function validationTeacherForm($db)
             // tout en affichant une erreur précise à l'utilisateur
             'firstName' => $_POST['firstName'],
             'name'  => $_POST['name'],
-            'nickName'  => $_POST['nickName'],
+            'nickName' => $_POST['nickName'],
             'origin'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-            'section'   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'section'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
         ]
     );
 
+// $imageData = UpdateImages($_FILES, $teacher);
+$imageData = RenameImages($_FILES, $db);
+
     $userData['imageData'] = $imageData;
-
-    // Image
-
-    $downloadImgIsNotFilled = ($imageData["downloadImg"] == null);
 
     // echo "<pre>";
     // var_dump($userData);
     // echo "</pre>";
-
-    // echo "<pre>";
-    // var_dump($_POST);
-    // echo "</pre>";
-
-
 
     // Si certains champs n'ont pas été saisies alors on donne la valeur ''
     $genre    = $userData['genre']    ?? '';
@@ -99,6 +70,7 @@ function validationTeacherForm($db)
     $origin   = $userData['origin']   ?? '';
     $section   = $userData['section']   ?? '';
     $downloadImg = $userData['imageData']['downloadImg']['size'] ?? '';
+
     $errors = [];
 
     //
@@ -170,9 +142,10 @@ function validationTeacherForm($db)
 
     if (!$downloadImg) {
         $errors['downloadImg'] = ERROR_IMAGE_REQUIRED;
-    } elseif (( $imageData['extensionImg'] != "jpg")) {
-        $errors["downloadImg"] = ERROR_IMAGE_EXTENSION;
+    } elseif (!in_array($imageData['extensionImg'], ['jpg', 'png'])) {
+        $errors['downloadImg'] = ERROR_IMAGE_EXTENSION;
     }
-
     return ["userData" => $userData, "errors" => $errors];
 }
+
+

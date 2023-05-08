@@ -8,7 +8,8 @@
  */
 
 include("header.php");
-include_once(__DIR__ . "/validateForm.php");
+include("uploadImages/RenameImages.php");
+include_once(__DIR__ . "/validateAddTeacherForm.php");
 
 if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     header('HTTP/1.0 403 Forbidden', true, 403);
@@ -16,33 +17,27 @@ if (!isset($_SESSION['userConnected']) || $_SESSION['userConnected'] != 1) {
     exit;
 }
 
-include("uploadImages/RenameImages.php");
-
-const ERRORVOID = "*Obligatoire";
-
 $sections = $db->getAllSections();
 
-$errors  = [];
+$errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $result = validationTeacherForm($db);
     $errors = $result["errors"];
     $userData = $result["userData"];
+    $imageData = RenameImages($_FILES, $db);
 
     // Si aucune erreur de validation 
     // Cela signifie que les données sont propres et validées
     // Nous pouvons insérer les données en BD
     if (count($errors) === 0) {
+        
         move_uploaded_file($imageData['fileTmpNameImg'], $imageData['uploadPathImg']);
         // On ne changera pas la valeur de $_POST en sachant que ce sont des variables read-only.
         // Ce qui veut dire qu'on ne nommera pas une varaible comme ceci -> $_POST['imPath'] = xyz !!!!!!
         // On rajoutera les variables hors formulaire en tant que params.
         $teachers = $db->InsertTeacher($_POST, $imageData);
-
-        echo "<pre>";
-        var_dump($imageData);
-        echo "</pre>";
 
         $errorOrValidationMessage = "L'enseignant a bien été ajouté!";
     } else {
@@ -51,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -109,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="nickName">Surnom :</label>
                         <input type="text" name="nickName" id="nickName" value=<?php if (isset($nickName)) echo $nickName ?>>
                     </p>
-                    <p style="color:red;">
                         <span id="show-error">
                             <?= array_key_exists("nickName", $errors) && $errors["nickName"] ? '<p style="color:red;">' . $errors["nickName"] . '</p>' : '' ?>
                         </span>

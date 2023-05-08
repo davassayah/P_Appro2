@@ -232,8 +232,6 @@
             $this->queryPrepareExecute($query, $teacher);
         }
     
-    
-    
         /**
          * Fonction permettant de supprimer un enseignant
          * @param $id int | id de l'enseignant a supprimer
